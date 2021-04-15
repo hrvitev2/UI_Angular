@@ -1,0 +1,56 @@
+<!-- <mat-toolbar color="primary" *ngIf="isUserLoggedIn">
+    <mat-toolbar-row>
+        <button mat-icon-button>
+            <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+        </button>
+        <h1>Hrvite</h1>
+        <button mat-icon-button class="user-menu" [matMenuTriggerFor]="menu">
+            <img src="./assets/images/user.png">
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="logout()">
+                <span>Logout</span>
+            </button>
+        </mat-menu>
+
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-sidenav-container>
+    <mat-sidenav #sidenav>
+        <mat-nav-list >
+            <a mat-list-item [routerLink]="'/dashboard'"> Dashboard </a>
+            <a mat-list-item [routerLink]="'/department'"> Department </a>
+            <a mat-list-item [routerLink]="'/company'"> Company </a>
+            <a mat-list-item [routerLink]="'/gstcode'"> GST State Code </a>
+            <a mat-list-item [routerLink]="'/sac-code'"> SAC Code </a>
+            <a mat-list-item [routerLink]="'/university'"> University </a>
+            <a mat-list-item [routerLink]="'/customer-type'"> Customer Type </a>
+            <a mat-list-item [routerLink]="'/industry'"> Industry </a>
+            <a mat-list-item [routerLink]="'/leave-type'"> Leave Type </a>
+            <a mat-list-item [routerLink]="'/tax-excemption'"> Tax Excemption </a>
+            <a mat-list-item [routerLink]="'/candidate-status'"> Candidate Status</a>
+            <a mat-list-item [routerLink]="'/skill'"> Skill </a>
+            <a mat-list-item [routerLink]="'/skill/secondary'">Secondary Skill</a>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div style="height: 100vh;" class="body-content">
+            
+        </div>
+    </mat-sidenav-content> 
+</mat-sidenav-container>-->
+
+<app-leftmenu *ngIf="isUserLoggedIn"></app-leftmenu>
+<!-- Main body part  -->
+<div class="page" *ngIf="isUserLoggedIn">
+    <app-header></app-header>
+
+    <router-outlet></router-outlet>
+
+</div>
+
+<div *ngIf="!isUserLoggedIn">
+
+    <router-outlet></router-outlet>
+</div>

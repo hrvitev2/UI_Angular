@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Hrms</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+
+  <!-- Bootstrap Core and vandor -->
+  <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css" />
+
+  <!-- Plugins css -->
+  <link rel="stylesheet" href="assets/plugins/charts-c3/c3.min.css" />
+
+  <!-- Core css -->
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/theme2.css" />
+  <base href="/">
+  <style>
+    .HideDiv {
+      display: none !important;
+    }
+
+    .ShowDiv {
+      display: block !important;
+    }
+
+    .overlay {
+      background-color: rgba(23, 25, 28, 0.5);
+      position: fixed;
+      cursor: pointer;
+      display: none;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 10;
+    }
+
+    .overlay.open {
+      display: block;
+    }
+
+    .sidebar-scroll {
+      height: calc(100vh - 65px);
+      overflow: auto;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    .sticky-top {
+      width: calc(100% - 280px);
+      position: fixed;
+    }
+
+    .marginTop {
+      margin-top: 7.1% !important;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="body" class="font-montserrat">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+      <div class="loader">
+      </div>
+    </div>
+    <div id="main_content">
+      <app-root></app-root>
+    </div>
+  </div>
+</body>
+
+</html>

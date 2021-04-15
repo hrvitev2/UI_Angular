@@ -1,0 +1,15 @@
+ 
+.mat-drawer{
+    
+        width: 265px;
+    }
+
+.user-menu img { 
+    width: 40px;
+}
+
+.user-menu {
+
+    margin-left: auto;
+    order: 2;
+} 
