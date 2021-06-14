@@ -1,51 +1,5 @@
-<!-- <mat-card>
-    <h2>Company
-        <button mat-raised-button class="float-right" (click)="addComp()" color="primary">Add Company</button>
-    </h2>
-
-    <div class="mat-elevation-z8">
-        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-
-
-            <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="shortName">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Short Name </th>
-                <td mat-cell *matCellDef="let element"> {{element.shortName}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-                <td mat-cell *matCellDef="let element">
-                    <span *ngIf="element.status == 'a'">Active</span>
-                    <span *ngIf="element.status == 'i'">inActive</span>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
-                <td mat-cell *matCellDef="let row">
-                    <button mat-button (click)="edit(row.id)">Edit</button>
-                </td>
-            </ng-container>
-
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-
-
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-    </div>
-
-</mat-card> -->
-
-
-
 <br/>
+
 <div class="section-body">
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center">
@@ -68,12 +22,12 @@
                         <div class="card-options">
                             <form>
                                 <div class="input-group">
-                                    <input type="text" class="form-control form-control-sm" placeholder="Search something..." name="s">
-                                    <span class="input-group-btn ml-2">
+                                    <input type="text" class="form-control form-control-sm" [(ngModel)]="searchKey"  (input)="getList(searchKey,1)" placeholder="Search something..." name="s">
+                                    <!-- <span class="input-group-btn ml-2">
                                         <button class="btn btn-icon" type="submit">
                                             <span class="fe fe-search"></span>
                                         </button>
-                                    </span>
+                                    </span> -->
                                 </div>
                             </form>
                         </div>
@@ -90,7 +44,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let data of compList">
+                                    <tr *ngFor="let data of compList?.rows">
                                         <td>
                                             <div class="font-15">{{data?.name}}</div>
                                         </td>
@@ -102,16 +56,58 @@
                                             <span *ngIf="data.status == 'i'">inActive</span>
                                         </td>
                                         <td>
-                                            <button type="button" (click)="edit(data.id)" class="btn btn-icon" title="Edit">
+                                            <button type="button" (click)="edit(data)" class="btn btn-icon" title="Edit">
                                                 <i class="fa fa-edit"></i>
                                             </button>
-                                            <button type="button" class="btn btn-icon js-sweetalert" title="Delete" data-type="confirm">
+                                            <button type="button" class="btn btn-icon js-sweetalert" (click)="delete(data)" title="Delete" data-type="confirm">
                                                 <i class="fa fa-trash-o text-danger"></i>
                                             </button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 hidden-xs">
+                            </div>
+                            <div class="col-sm-4 text-center">
+                                <!-- <small class="text-muted inline m-t-sm m-b-sm">showing {{statingValue}} -
+                        <span *ngIf="lists?.data.length > 9"> {{statingValue + 9}}</span>
+        
+                        <span *ngIf="lists?.data.length < 10">{{lists.data?.length}}</span> of {{lists?.total}} items</small> -->
+                            </div>
+                            <div class="col-sm-4 text-right text-center-xs">
+                                <ul class="pagination pagination-sm m-t-none m-b-none" *ngIf="pager?.totalPages != 1">
+                                    <li>
+                                        <button class="page-link" [disabled]="pager.currentPage === 0"
+                                            (click)="assigndata(0)">
+                                            <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="page-link" [disabled]="pager.currentPage === 0"
+                                            (click)="assigndata(pager.currentPage - 1)">
+                                            <i class="fa fa-angle-left" aria-hidden="true"></i>
+                                        </button>
+                                    </li>
+                                    <li *ngFor="let page of pager.pages">
+                                        <button class="page-link" [ngClass]="{active:pager.currentPage === page}"
+                                            (click)="assigndata(page)">{{page}}</button>
+                                    </li>
+                                    <li>
+                                        <button class="page-link" [disabled]="pager.currentPage === pager.totalPages"
+                                            (click)="assigndata(pager.currentPage + 1)">
+                                            <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="page-link" [disabled]="pager.currentPage === pager.totalPages"
+                                            (click)="assigndata(pager.totalPages)">
+                                            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>

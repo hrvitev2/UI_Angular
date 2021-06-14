@@ -81,6 +81,18 @@ const routes: Routes = [
     // canLoad: [AuthGuardCanLoadService]
   },
   {
+    path: "email-template",
+    loadChildren: () => import('./emailtemplate/emailtemplate.module').then(m => m.EmailtemplateModule),
+    canActivate: [AuthGuardService],
+    // canLoad: [AuthGuardCanLoadService]
+  },
+  {
+    path: "customer",
+    loadChildren: () => import('./customer/customer.module').then(m => m.CustomerModule),
+    canActivate: [AuthGuardService],
+    // canLoad: [AuthGuardCanLoadService]
+  },
+  {
     path: "**",
     loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
 

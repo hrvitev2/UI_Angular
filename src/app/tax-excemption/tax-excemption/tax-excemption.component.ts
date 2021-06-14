@@ -6,12 +6,16 @@ import { HttpService } from '../../http.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { PagerService} from '../../pager.service';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-tax-excemption',
   templateUrl: './tax-excemption.component.html',
   styleUrls: ['./tax-excemption.component.css']
 })
 export class TaxExcemptionComponent implements OnInit {
+  searchKey: any;
   taxList: any;
   dialogRef: any;
   taxForm: FormGroup;
@@ -20,11 +24,19 @@ export class TaxExcemptionComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   @ViewChild('template') templateRef: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+
+  statingValue: number;
+  pagers: any = [];
+  lists: any = {};
+  // pager object
+  pager: any = {};
+  // paged items
+  pagedItems: any[];
+  firstPageData: any;
 
   displayedColumns: string[] = ['from', 'to', 'percentage', 'status', 'actions'];
 
-  constructor(private http: HttpService, public dialog: MatDialog) {
+  constructor(private http: HttpService, public dialog: MatDialog, private pagerService: PagerService, private toastr: ToastrService) {
     this.taxForm = new FormGroup({
       'from': new FormControl("", Validators.required),
       'to': new FormControl("", Validators.required),
@@ -42,19 +54,26 @@ export class TaxExcemptionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getList();
+    this.getList(this.searchKey, 1);
   }
 
-  getList() {
-    this.http.getList('tax').subscribe(
+  getList(searchKey, pageNo) {
+    let added = 1;
+    if (pageNo != 1) {
+      added = pageNo * 5 + 1 - 5;
+    }
+    this.http.getList('tax', searchKey, pageNo).subscribe(
       (data: any) => {
-        this.taxList = data.data.rows;
+        this.taxList = data.data;
         this.dataSource = new MatTableDataSource(this.taxList);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        if (pageNo == 1) {
+          this.setPage(pageNo);
+          this.firstPageData = this.taxList;
+        }
+
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
 
@@ -68,35 +87,63 @@ export class TaxExcemptionComponent implements OnInit {
 
   }
 
+  setPage(page: number) {
+    if (page < 1 || page > parseInt(this.taxList.count) + 1 / 5) {
+      return;
+    }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(parseInt(this.taxList.count), page, 5);
+    // get current page of items
+    this.pagedItems = this.pager.pages.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
+  }
+  assigndata(page) {
+    let added = 1;
+    if (page != 1) {
+      added = page * 5 + 1 - 5;
+    }
+    this.statingValue = added;
+
+    if (this.statingValue != 1) {
+      this.getList(this.searchKey, page);
+    } else {
+      this.taxList = this.firstPageData;
+    }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(parseInt(this.taxList.count), page, 5);
+    // get current page of items
+    this.pagedItems = this.pager.pages.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
+  }
 
   add() {
     if (this.taxForm.invalid) {
-      alert("Please Fill the Mandatory Details");
+      this.toastr.error("Please Fill the Mandatory Details");
       return false;
     }
     this.http.add('tax', this.taxForm.value).subscribe(
       (data: any) => {
-        alert("Added Successfully!");
-        this.getList();
+        this.toastr.success("Added Successfully!");
+        this.getList(this.searchKey, 1);
         this.taxForm.reset();
         this.dialogRef.close();
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
 
-  edit(i) {
-    this.taxEditForm.controls.tId.setValue(i);
-    for (let i = 0; i < this.taxList.length; i++) {
-      if (this.taxEditForm.value.tId == this.taxList[i].id) {
-        this.taxEditForm.controls.from.setValue(this.taxList[i].from);
-        this.taxEditForm.controls.to.setValue(this.taxList[i].to);
-        this.taxEditForm.controls.percentage.setValue(this.taxList[i].percentage);
-        this.taxEditForm.controls.status.setValue(this.taxList[i].status);
-        this.dialogRef = this.dialog.open(this.templateRef);
-      }
-    }
+  edit(data) {
+    this.taxEditForm.controls.tId.setValue(data.id);
+    this.taxEditForm.controls.from.setValue(data.from);
+    this.taxEditForm.controls.to.setValue(data.to);
+    this.taxEditForm.controls.percentage.setValue(data.percentage);
+    this.taxEditForm.controls.status.setValue(data.status);
+    this.dialogRef = this.dialog.open(this.templateRef);
   }
 
   applyFilter(event: Event) {
@@ -110,18 +157,38 @@ export class TaxExcemptionComponent implements OnInit {
 
   update() {
     if (this.taxForm.invalid) {
-      alert("Please Fill the Mandatory Details");
+      this.toastr.error("Please Fill the Mandatory Details");
       return false;
     }
     this.http.update('tax', this.taxEditForm.value).subscribe(
       (data: any) => {
-        alert("Updated Successfully!");
+        this.toastr.success("Updated Successfully!");
         this.taxEditForm.reset();
         this.dialogRef.close();
-        this.getList();
+        this.getList(this.searchKey, 1);
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
+
+  delete(data) {
+    if (confirm("Are you sure want to delete?")) {
+      this.taxEditForm.controls.tId.setValue(data.id);
+      this.taxEditForm.controls.from.setValue(data.from);
+      this.taxEditForm.controls.to.setValue(data.to);
+      this.taxEditForm.controls.percentage.setValue(data.percentage);
+      this.taxEditForm.controls.status.setValue('d');
+      this.http.update('tax', this.taxEditForm.value).subscribe(
+        (data: any) => {
+          this.toastr.success("Deleted Successfully!");
+          this.taxEditForm.reset();
+          this.getList(this.searchKey, 1);
+        },
+        (error: any) => {
+          this.toastr.error(error.msg);
+        });
+    }
+  }
+
 }

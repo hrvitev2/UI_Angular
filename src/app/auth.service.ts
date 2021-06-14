@@ -23,10 +23,19 @@ export class AuthService {
     localStorage.setItem("AT", Data.token);
   }
 
-  
   login(body) {
     let headers = new HttpHeaders()
       .set("Content-Type", "application/json")
     return this.httpClient.post(this.APIURL + 'hrvite/auth/login', body, { headers })
+  }
+
+  getJwtToken() {
+    return localStorage.getItem("userToken");
+  }
+
+  refreshToken() {
+    let headers = new HttpHeaders()
+      .set("Content-Type", "application/json").set("refreshToken", localStorage.getItem("refreshToken"))
+    return this.httpClient.get(this.APIURL + 'admin/auth/tokenRegenerate', { headers })
   }
 }

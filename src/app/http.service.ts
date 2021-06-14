@@ -22,9 +22,15 @@ export class HttpService {
   }
 
 
-  getDepartmentList() {
+  getDepartmentList(key, page) {
+    let ps = page - 1;
     let headers = new HttpHeaders()
-      .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
+      .set("Content-Type", "application/json").set("offset", ps.toString()).set("limit", '5').set("Authorization", 'Bearer ' + this.token);
+
+    if (key) {
+      headers = new HttpHeaders()
+        .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token).set("offset", ps.toString()).set("limit", '5').set("filter", key);
+    }
     return this.httpClient.get(this.APIURL + 'admin/department/list', { headers })
   }
 
@@ -42,7 +48,8 @@ export class HttpService {
   }
 
 
-  getList(type) {
+  getList(type, key, page) {
+    let ps = page - 1;
     let endPoint;
     switch (type) {
       case 'comp':
@@ -67,9 +74,19 @@ export class HttpService {
         endPoint = "admin/skill/list"; break;
       case 'skill-2':
         endPoint = "admin/secondarySkill/list"; break;
+      case 'emailTemplate':
+        endPoint = "admin/emailTemplate/list"; break;
+      case 'customer':
+        endPoint = "admin/customer/list"; break;
     }
     let headers = new HttpHeaders()
-      .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
+      .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token).set("offset", ps.toString()).set("limit", '5');
+
+
+    if (key) {
+      headers = new HttpHeaders()
+        .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token).set("filter", key).set("offset", ps.toString()).set("limit", '5');
+    }
     return this.httpClient.get(this.APIURL + endPoint, { headers })
   }
 
@@ -98,6 +115,10 @@ export class HttpService {
         endPoint = "admin/skill/add"; break;
       case 'skill-2':
         endPoint = "admin/secondarySkill/add"; break;
+      case 'emailTemplate':
+        endPoint = "admin/emailTemplate/add"; break;
+      case 'customer':
+        endPoint = "admin/customer/add"; break;
     }
     let headers = new HttpHeaders()
       .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
@@ -129,10 +150,51 @@ export class HttpService {
         endPoint = "admin/skill/update"; break;
       case 'skill-2':
         endPoint = "admin/secondarySkill/update"; break;
+      case 'emailTemplate':
+        endPoint = "admin/emailTemplate/update"; break;
+      case 'customer':
+        endPoint = "admin/customer/update"; break;
     }
     let headers = new HttpHeaders()
       .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
     return this.httpClient.post(this.APIURL + endPoint, body, { headers })
+  }
+
+
+  getPresignedUrl(body) {
+    let headers = new HttpHeaders()
+      .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
+    return this.httpClient.post(this.APIURL + 'admin/s3/presignedURLToView', body, { headers })
+  }
+
+  getDetails(type, id) {
+    let endPoint;
+    let types;
+    switch (type) {
+      case 'customer':
+        endPoint = "admin/customer/view";types = "uid"; break;
+        
+    }
+    let headers = new HttpHeaders()
+      .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token).set(types, id.toString());
+    return this.httpClient.get(this.APIURL + endPoint, { headers })
+  }
+
+  upload(fd) {
+    let headers = new HttpHeaders()
+      .set("Authorization", 'Bearer ' + this.token);
+    return this.httpClient.post(this.APIURL + 'admin/s3/upload', fd, { headers })
+  }
+
+  getCustomerFilter(key, value) {
+    let headers = new HttpHeaders()
+      .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
+
+    if (key) {
+      headers = new HttpHeaders()
+        .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token).set(key, value);
+    }
+    return this.httpClient.get(this.APIURL + 'admin/customer/list', { headers })
   }
 
 }

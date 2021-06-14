@@ -6,6 +6,9 @@ import { HttpService } from '../../http.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { PagerService } from '../../pager.service';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-company',
@@ -17,15 +20,23 @@ export class CompanyComponent implements OnInit {
   dialogRef: any;
   companyForm: FormGroup;
   companyEditForm: FormGroup;
-
+  searchKey: any;
   dataSource: MatTableDataSource<any>;
   @ViewChild('template') templateRef: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+
+  statingValue: number;
+  pagers: any = [];
+  lists: any = {};
+  // pager object
+  pager: any = {};
+  // paged items
+  pagedItems: any[];
+  firstPageData: any;
 
   displayedColumns: string[] = ['name', 'shortName', 'status', 'actions'];
 
-  constructor(private http: HttpService, public dialog: MatDialog) {
+  constructor(private http: HttpService, public dialog: MatDialog, private pagerService: PagerService, private toastr: ToastrService) {
     this.companyForm = new FormGroup({
       'name': new FormControl("", Validators.required),
       'shortName': new FormControl("", Validators.required),
@@ -43,22 +54,65 @@ export class CompanyComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getList();
+    this.getList(this.searchKey, 1);
   }
 
-  getList() {
-    this.http.getList('comp').subscribe(
+  getList(searchKey, pageNo) {
+    let added = 1;
+    if (pageNo != 1) {
+      added = pageNo * 5 + 1 - 5;
+    }
+    this.http.getList('comp', searchKey, pageNo).subscribe(
       (data: any) => {
-        this.compList = data.data.rows;
+        this.compList = data.data;
         this.dataSource = new MatTableDataSource(this.compList);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        if (pageNo == 1) {
+          this.setPage(pageNo);
+          this.firstPageData = this.compList;
+        }
+        if (pageNo == 1) {
+          this.setPage(pageNo);
+          this.firstPageData = this.compList;
+        }
+
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
 
+  setPage(page: number) {
+    if (page < 1 || page > parseInt(this.compList.count) + 1 / 5) {
+      return;
+    }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(parseInt(this.compList.count), page, 5);
+    // get current page of items
+    this.pagedItems = this.pager.pages.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
+  }
+  assigndata(page) {
+    let added = 1;
+    if (page != 1) {
+      added = page * 5 + 1 - 5;
+    }
+    this.statingValue = added;
+
+    if (this.statingValue != 1) {
+      this.getList(this.searchKey, page);
+    } else {
+      this.compList = this.firstPageData;
+    }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(parseInt(this.compList.count), page, 5);
+    // get current page of items
+    this.pagedItems = this.pager.pages.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
+  }
 
   addComp() {
     this.companyEditForm.reset();
@@ -76,32 +130,28 @@ export class CompanyComponent implements OnInit {
       return false;
     }
     if (this.companyForm.invalid) {
-      alert("Please Fill the Mandatory Details");
+      this.toastr.error("Please Fill the Mandatory Details");
       return false;
     }
     this.http.add('comp', this.companyForm.value).subscribe(
       (data: any) => {
-        alert("Added Successfully!");
-        this.getList();
+        this.toastr.success("Added Successfully!");
+        this.getList(this.searchKey, 1);
         this.companyForm.reset();
         this.dialogRef.close();
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
 
-  edit(i) {
-    this.companyEditForm.controls.cId.setValue(i);
-    for (let i = 0; i < this.compList.length; i++) {
-      if (this.companyEditForm.value.cId == this.compList[i].id) {
-        this.companyEditForm.controls.name.setValue(this.compList[i].name);
-        this.companyEditForm.controls.shortName.setValue(this.compList[i].shortName);
-        this.companyEditForm.controls.status.setValue(this.compList[i].status);
-        this.companyEditForm.controls.note.setValue(this.compList[i].note);
-        this.dialogRef = this.dialog.open(this.templateRef);
-      }
-    }
+  edit(data) {
+    this.companyEditForm.controls.name.setValue(data.name);
+    this.companyEditForm.controls.cId.setValue(data.name);
+    this.companyEditForm.controls.shortName.setValue(data.shortName);
+    this.companyEditForm.controls.status.setValue(data.status);
+    this.companyEditForm.controls.note.setValue(data.note);
+    this.dialogRef = this.dialog.open(this.templateRef);
   }
 
   applyFilter(event: Event) {
@@ -114,16 +164,37 @@ export class CompanyComponent implements OnInit {
   }
 
   update() {
-    this.http.update('comp',this.companyEditForm.value).subscribe(
+    this.http.update('comp', this.companyEditForm.value).subscribe(
       (data: any) => {
-        alert("Updated Successfully!");
+        this.toastr.success("Updated Successfully!");
         this.companyEditForm.reset();
         this.dialogRef.close();
-        this.getList();
+        this.getList(this.searchKey, 1);
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
+  }
+
+
+  delete(data) {
+    if (confirm("Are you sure want to delete?")) {
+
+      this.companyEditForm.controls.cId.setValue(data.id);
+      this.companyEditForm.controls.name.setValue(data.name);
+      this.companyEditForm.controls.shortName.setValue(data.shortName);
+      this.companyEditForm.controls.status.setValue('d');
+      this.companyEditForm.controls.note.setValue(data.note);
+      this.http.update('comp', this.companyEditForm.value).subscribe(
+        (data: any) => {
+          this.toastr.success("Deleted Successfully!");
+          this.companyEditForm.reset();
+          this.getList(this.searchKey, 1);
+        },
+        (error: any) => {
+          this.toastr.error(error.msg);
+        });
+    }
   }
 
 }

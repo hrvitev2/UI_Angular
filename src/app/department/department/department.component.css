@@ -1,0 +1,28 @@
+
+.pagination > li > button {
+    border-color: #dee5e7 !important;
+}
+.pagination-sm > li > button, .pagination-sm > li > span {
+    padding: 5px 10px !important;
+    font-size: 12px !important;
+}
+
+.pagination > li > button, .pagination > li > span {
+    position: relative !important;
+    float: left !important;
+    padding: 6px 12px !important;
+    margin-left: -1px !important;
+    line-height: 1.42857143 !important;
+    color: #337ab7 !important;
+    text-decoration: none !important;
+    background-color: #fff !important;
+    border: 1px solid #ddd !important;
+}
+
+.pagination > li > button.active {
+    background-color: #f0f3f4 !important
+}
+
+.pagination > li > button:disabled:hover {
+    cursor:not-allowed
+ }

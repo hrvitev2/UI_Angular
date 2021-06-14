@@ -6,6 +6,9 @@ import { HttpService } from '../../http.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { PagerService} from '../../pager.service';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-skill',
@@ -13,6 +16,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./skill.component.css']
 })
 export class SkillComponent implements OnInit {
+  searchKey: any;
   skillList: any;
   industryList: any;
   dialogRef: any;
@@ -22,11 +26,19 @@ export class SkillComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   @ViewChild('template') templateRef: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+
+  statingValue: number;
+  pagers: any = [];
+  lists: any = {};
+  // pager object
+  pager: any = {};
+  // paged items
+  pagedItems: any[];
+  firstPageData: any;
 
   displayedColumns: string[] = ['name', 'industry', 'status', 'actions'];
 
-  constructor(private http: HttpService, public dialog: MatDialog) {
+  constructor(private http: HttpService, public dialog: MatDialog, private pagerService: PagerService, private toastr: ToastrService) {
     this.skillForm = new FormGroup({
       'name': new FormControl("", Validators.required),
       'industryId': new FormControl("", Validators.required),
@@ -42,13 +54,13 @@ export class SkillComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getList();
+    this.getList(this.searchKey, 1);
   }
 
   getIndustryList() {
-    this.http.getList('industry').subscribe(
+    this.http.getList('industry', '', 0).subscribe(
       (data: any) => {
-        this.industryList = data.data.rows;
+        this.industryList = data.data;
         for (let i = 0; i < this.industryList.length; i++) {
           for (let j = 0; j < this.skillList.length; j++) {
             if (this.industryList[i].id == this.skillList[j].industryId) {
@@ -58,25 +70,64 @@ export class SkillComponent implements OnInit {
         }
         console.log(this.skillList)
         this.dataSource = new MatTableDataSource(this.skillList);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
 
-  getList() {
-    this.http.getList('skill').subscribe(
+  getList(searchKey, pageNo) {
+    let added = 1;
+    if (pageNo != 1) {
+      added = pageNo * 5 + 1 - 5;
+    }
+    this.http.getList('skill', searchKey, pageNo).subscribe(
       (data: any) => {
-        this.skillList = data.data.rows;
+        this.skillList = data.data;
         this.getIndustryList();
+        if (pageNo == 1) {
+          this.setPage(pageNo);
+          this.firstPageData = this.skillList;
+        }
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
 
+  setPage(page: number) {
+    if (page < 1 || page > parseInt(this.skillList.count) + 1 / 5) {
+      return;
+    }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(parseInt(this.skillList.count), page, 5);
+    // get current page of items
+    this.pagedItems = this.pager.pages.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
+  }
+  assigndata(page) {
+    let added = 1;
+    if (page != 1) {
+      added = page * 5 + 1 - 5;
+    }
+    this.statingValue = added;
+
+    if (this.statingValue != 1) {
+      this.getList(this.searchKey, page);
+    } else {
+      this.skillList = this.firstPageData;
+    }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(parseInt(this.skillList.count), page, 5);
+    // get current page of items
+    this.pagedItems = this.pager.pages.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
+  }
   addComp() {
     this.skillEditForm.reset();
     this.skillForm.reset();
@@ -88,32 +139,30 @@ export class SkillComponent implements OnInit {
   add() {
     this.skillForm.controls.industryId.setValue(this.skillForm.value.industryId.toString());
     if (this.skillForm.invalid) {
-      alert("Please Fill the Mandatory Details");
+      this.toastr.error("Please Fill the Mandatory Details");
       return false;
     }
     this.http.add('skill', this.skillForm.value).subscribe(
       (data: any) => {
-        alert("Added Successfully!");
-        this.getList();
+        this.toastr.success("Added Successfully!");
+        this.getList(this.searchKey, 1);
         this.skillForm.reset();
         this.dialogRef.close();
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
 
-  edit(i) {
-    this.skillEditForm.controls.sId.setValue(i);
-    for (let i = 0; i < this.skillList.length; i++) {
-      if (this.skillEditForm.value.sId == this.skillList[i].id) {
-        this.skillEditForm.controls.name.setValue(this.skillList[i].name);
-        this.skillEditForm.controls.industryId.setValue(this.skillList[i].industryId);
-        this.skillEditForm.controls.status.setValue(this.skillList[i].status);
-        this.dialogRef = this.dialog.open(this.templateRef);
-      }
-    }
+  edit(data) {
+    this.skillEditForm.controls.sId.setValue(data.id);
+    this.skillEditForm.controls.name.setValue(data.name);
+    this.skillEditForm.controls.industryId.setValue(data.industryId);
+    this.skillEditForm.controls.status.setValue(data.status);
+    this.dialogRef = this.dialog.open(this.templateRef);
   }
+
+
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -128,13 +177,32 @@ export class SkillComponent implements OnInit {
     this.skillEditForm.controls.industryId.setValue(this.skillEditForm.value.industryId.toString());
     this.http.update('skill', this.skillEditForm.value).subscribe(
       (data: any) => {
-        alert("Updated Successfully!");
+        this.toastr.success("Updated Successfully!");
         this.skillEditForm.reset();
         this.dialogRef.close();
-        this.getList();
+        this.getList(this.searchKey, 1);
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
+  }
+
+  delete(data) {
+    console.log(data);
+    if (confirm("Are you sure want to delete?")) {
+      this.skillEditForm.controls.sId.setValue(data.id);
+      this.skillEditForm.controls.name.setValue(data.name);
+      this.skillEditForm.controls.industryId.setValue(data.industryId.toString());
+      this.skillEditForm.controls.status.setValue('d');
+      this.http.update('skill', this.skillEditForm.value).subscribe(
+        (data: any) => {
+          this.toastr.success("Deleted Successfully!");
+          this.skillEditForm.reset();
+          this.getList(this.searchKey, 1);
+        },
+        (error: any) => {
+          this.toastr.error(error.msg);
+        });
+    }
   }
 }

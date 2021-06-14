@@ -11,7 +11,8 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~11.2.7",
+    "@angular-material-components/file-input": "^6.0.0",
+    "@angular/animations": "^11.2.14",
     "@angular/cdk": "^11.2.6",
     "@angular/common": "~11.2.7",
     "@angular/compiler": "~11.2.7",
@@ -22,10 +23,6 @@
     "@angular/platform-browser": "~11.2.7",
     "@angular/platform-browser-dynamic": "~11.2.7",
     "@angular/router": "~11.2.7",
-    "rxjs": "~6.6.0",
-    "tslib": "^2.0.0",
-    "underscore": "^1.12.1",
-    "zone.js": "~0.11.3",
     "@fullcalendar/angular": "^5.2.0",
     "@fullcalendar/daygrid": "^5.2.0",
     "@fullcalendar/interaction": "^5.2.0",
@@ -37,10 +34,14 @@
     "font-awesome": "^4.7.0",
     "ng-apexcharts": "^1.5.1",
     "ng-multiselect-dropdown": "^0.2.10",
-    "ngx-toastr": "^12.1.0",
     "ngx-bootstrap": "^5.6.1",
+    "ngx-toastr": "^12.1.0",
+    "rxjs": "~6.6.0",
     "simple-line-icons": "^2.5.5",
-    "sweetalert2": "^9.17.1"
+    "sweetalert2": "^9.17.1",
+    "tslib": "^2.0.0",
+    "underscore": "^1.12.1",
+    "zone.js": "~0.11.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1102.6",

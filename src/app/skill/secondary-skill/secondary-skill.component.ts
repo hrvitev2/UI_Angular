@@ -6,6 +6,9 @@ import { HttpService } from '../../http.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { PagerService} from '../../pager.service';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-secondary-skill',
@@ -13,6 +16,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./secondary-skill.component.css']
 })
 export class SecondarySkillComponent implements OnInit {
+  searchKey: any;
 
   skillList: any;
   secSkillList: any;
@@ -23,11 +27,19 @@ export class SecondarySkillComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   @ViewChild('template') templateRef: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+
+  statingValue: number;
+  pagers: any = [];
+  lists: any = {};
+  // pager object
+  pager: any = {};
+  // paged items
+  pagedItems: any[];
+  firstPageData: any;
 
   displayedColumns: string[] = ['name', 'skill', 'status', 'actions'];
 
-  constructor(private http: HttpService, public dialog: MatDialog) {
+  constructor(private http: HttpService, public dialog: MatDialog, private pagerService: PagerService, private toastr: ToastrService) {
     this.skillForm = new FormGroup({
       'name': new FormControl("", Validators.required),
       'skillId': new FormControl("", Validators.required),
@@ -43,13 +55,13 @@ export class SecondarySkillComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getList();
+    this.getList(this.searchKey, 1);
   }
 
   getSkillList() {
-    this.http.getList('skill').subscribe(
+    this.http.getList('skill', '', 0).subscribe(
       (data: any) => {
-        this.secSkillList = data.data.rows;
+        this.secSkillList = data.data;
         for (let i = 0; i < this.secSkillList.length; i++) {
           for (let j = 0; j < this.skillList.length; j++) {
             if (this.secSkillList[i].id == this.skillList[j].skillId) {
@@ -59,23 +71,62 @@ export class SecondarySkillComponent implements OnInit {
         }
 
         this.dataSource = new MatTableDataSource(this.skillList);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
 
-  getList() {
-    this.http.getList('skill-2').subscribe(
+  getList(searchKey, pageNo) {
+    let added = 1;
+    if (pageNo != 1) {
+      added = pageNo * 5 + 1 - 5;
+    }
+    this.http.getList('skill-2', searchKey, pageNo).subscribe(
       (data: any) => {
         this.getSkillList();
-        this.skillList = data.data.rows;
+        this.skillList = data.data;
+        if (pageNo == 1) {
+          this.setPage(pageNo);
+          this.firstPageData = this.skillList;
+        }
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
+  }
+  setPage(page: number) {
+    if (page < 1 || page > parseInt(this.skillList.count) + 1 / 5) {
+      return;
+    }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(parseInt(this.skillList.count), page, 5);
+    // get current page of items
+    this.pagedItems = this.pager.pages.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
+  }
+  assigndata(page) {
+    let added = 1;
+    if (page != 1) {
+      added = page * 5 + 1 - 5;
+    }
+    this.statingValue = added;
+
+    if (this.statingValue != 1) {
+      this.getList(this.searchKey, page);
+    } else {
+      this.skillList = this.firstPageData;
+    }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(parseInt(this.skillList.count), page, 5);
+    // get current page of items
+    this.pagedItems = this.pager.pages.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
   }
 
   addComp() {
@@ -89,31 +140,27 @@ export class SecondarySkillComponent implements OnInit {
   add() {
     this.skillForm.controls.skillId.setValue(this.skillForm.value.skillId.toString());
     if (this.skillForm.invalid) {
-      alert("Please Fill the Mandatory Details");
+      this.toastr.error("Please Fill the Mandatory Details");
       return false;
     }
     this.http.add('skill-2', this.skillForm.value).subscribe(
       (data: any) => {
-        alert("Added Successfully!");
-        this.getList();
+        this.toastr.success("Added Successfully!");
+        this.getList(this.searchKey, 1);
         this.skillForm.reset();
         this.dialogRef.close();
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
 
-  edit(i) {
-    this.skillEditForm.controls.sId.setValue(i);
-    for (let i = 0; i < this.skillList.length; i++) {
-      if (this.skillEditForm.value.sId == this.skillList[i].id) {
-        this.skillEditForm.controls.name.setValue(this.skillList[i].name);
-        this.skillEditForm.controls.skillId.setValue(this.skillList[i].skillId);
-        this.skillEditForm.controls.status.setValue(this.skillList[i].status);
-        this.dialogRef = this.dialog.open(this.templateRef);
-      }
-    }
+  edit(data) {
+    this.skillEditForm.controls.sId.setValue(data.id);
+    this.skillEditForm.controls.name.setValue(data.name);
+    this.skillEditForm.controls.skillId.setValue(data.skillId);
+    this.skillEditForm.controls.status.setValue(data.status);
+    this.dialogRef = this.dialog.open(this.templateRef);
   }
 
   applyFilter(event: Event) {
@@ -129,13 +176,31 @@ export class SecondarySkillComponent implements OnInit {
     this.skillEditForm.controls.skillId.setValue(this.skillEditForm.value.skillId.toString());
     this.http.update('skill-2', this.skillEditForm.value).subscribe(
       (data: any) => {
-        alert("Updated Successfully!");
+        this.toastr.success("Updated Successfully!");
         this.skillEditForm.reset();
         this.dialogRef.close();
-        this.getList();
+        this.getList(this.searchKey, 1);
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
+  }
+
+  delete(data) {
+    if (confirm("Are you sure want to delete?")) {
+      this.skillEditForm.controls.sId.setValue(data.id);
+      this.skillEditForm.controls.name.setValue(data.name);
+      this.skillEditForm.controls.skillId.setValue(data.skillId.toString());
+      this.skillEditForm.controls.status.setValue('d');
+      this.http.update('skill-2', this.skillEditForm.value).subscribe(
+        (data: any) => {
+          this.toastr.success("Deleted Successfully!");
+          this.skillEditForm.reset();
+          this.getList(this.searchKey, 1);
+        },
+        (error: any) => {
+          this.toastr.error(error.msg);
+        });
+    }
   }
 }

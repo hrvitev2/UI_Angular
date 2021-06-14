@@ -5,15 +5,18 @@ import { MatTableDataSource } from '@angular/material/table';
 import { HttpService } from '../../http.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { PagerService} from '../../pager.service';
+import { ToastrService } from 'ngx-toastr';
 import { fadeInItems } from '@angular/material/menu';
- 
+
 @Component({
   selector: 'app-department',
   templateUrl: './department.component.html',
   styleUrls: ['./department.component.css']
 })
 export class DepartmentComponent implements OnInit {
-
+  searchKey: string;
   editId: any;
   deptList: any;
   dialogRef: any;
@@ -22,14 +25,21 @@ export class DepartmentComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   @ViewChild('template') templateRef: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  statingValue: number;
+  pagers: any = [];
+  lists: any = {};
+  // pager object
+  pager: any = {};
+  // paged items
+  pagedItems: any[];
+  firstPageData: any;
 
   ngOnInit(): void {
-    this.getDepartmentList();
+    this.getDepartmentList(this.searchKey, 1);
   }
 
 
-  constructor(private http: HttpService, public dialog: MatDialog) {
+  constructor(private http: HttpService, public dialog: MatDialog, private pagerService: PagerService, private toastr: ToastrService) {
     this.deptForm = new FormGroup({
       'name': new FormControl("", Validators.required),
     });
@@ -44,17 +54,36 @@ export class DepartmentComponent implements OnInit {
     }
   }
 
-  getDepartmentList() {
-    this.http.getDepartmentList().subscribe(
+  getDepartmentList(searchKey, pageNo) {
+    let added = 1;
+    if (pageNo != 1) {
+      added = pageNo * 5 + 1 - 5;
+    }
+    this.statingValue = added;
+    this.http.getDepartmentList(searchKey, pageNo).subscribe(
       (data: any) => {
-        this.deptList = data.data.rows;
+        this.deptList = data.data;
         this.dataSource = new MatTableDataSource(this.deptList);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        if (pageNo == 1) {
+          this.setPage(pageNo);
+          this.firstPageData = this.deptList;
+        }
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
+  }
+  setPage(page: number) {
+    if (page < 1 || page > parseInt(this.deptList.count) + 1 / 5) {
+      return;
+    }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(parseInt(this.deptList.count), page, 5);
+    // get current page of items
+    this.pagedItems = this.pager.pages.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
   }
 
   addDept() {
@@ -64,9 +93,29 @@ export class DepartmentComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(result => {
     });
-    
+
   }
 
+  assigndata(page) {
+    let added = 1;
+    if (page != 1) {
+      added = page * 5 + 1 - 5;
+    }
+    this.statingValue = added;
+
+    if (this.statingValue != 1) {
+      this.getDepartmentList(this.searchKey, page);
+    } else {
+      this.deptList = this.firstPageData;
+    }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(parseInt(this.deptList.count), page, 5);
+    // get current page of items
+    this.pagedItems = this.pager.pages.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
+  }
 
   add() {
 
@@ -76,41 +125,55 @@ export class DepartmentComponent implements OnInit {
     }
 
     if (this.deptForm.invalid) {
-      alert("Please Fill the Mandatory Details");
+      this.toastr.error("Please Fill the Mandatory Details");
       return false;
     }
 
     this.http.addDept(this.deptForm.value).subscribe(
       (data: any) => {
-        alert("Added Successfully!");
-        this.getDepartmentList();
+        this.toastr.success("Added Successfully!");
+        this.getDepartmentList(this.searchKey, 1);
         this.dialogRef.close();
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
 
-  edit(i) {
-    this.editId = i;
-    for (let i = 0; i < this.deptList.length; i++) {
-      if (this.editId == this.deptList[i].id) {
-        this.deptForm.controls.name.setValue(this.deptList[i].name);
-        this.dialogRef = this.dialog.open(this.templateRef);
-      }
-    }
+  edit(data) {
+    this.editId = data.id;
+    this.deptForm.controls.name.setValue(data.name);
+    this.dialogRef = this.dialog.open(this.templateRef);
+
   }
 
   update() {
     let body = { "dId": this.editId, "name": this.deptForm.value.name }
     this.http.updateDept(body).subscribe(
       (data: any) => {
-        alert("Updated Successfully!");
+        this.toastr.success("Updated Successfully!");
         this.editId = null;
         this.dialogRef.close();
+        this.getDepartmentList(this.searchKey, 1);
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
+
+  delete(data) {
+    if (confirm("Are you sure want to delete?")) {
+      let body = { "dId": data.id, "status": 'd', 'name': data.name };
+      this.http.updateDept(body).subscribe(
+        (data: any) => {
+          this.toastr.success("Deleted Successfully!");
+          this.getDepartmentList(this.searchKey, 1);
+        },
+        (error: any) => {
+          this.toastr.error(error.msg);
+        });
+    }
+  }
+
+
 }

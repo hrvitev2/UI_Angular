@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { DataSharingService } from '../../data-sharing.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+
+import { ToastrService } from 'ngx-toastr';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -15,7 +17,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   durationInSeconds = 5;
 
-  constructor(private router: Router, private Auth: AuthService, private dataSharingService: DataSharingService, private _snackBar: MatSnackBar) {
+  constructor(private router: Router, private Auth: AuthService, private dataSharingService: DataSharingService, private _snackBar: MatSnackBar, private toastr: ToastrService) {
 
     this.loginForm = new FormGroup({
       'username': new FormControl("", [Validators.required, Validators.email]),
@@ -33,7 +35,7 @@ export class LoginComponent implements OnInit {
   login() {
 
     if (this.loginForm.invalid) {
-      alert("Please Fill the Mandatory Details");
+      this.toastr.error("Please Fill the Mandatory Details");
       return false;
     }
 
@@ -41,12 +43,12 @@ export class LoginComponent implements OnInit {
       (data: any) => {
         this.dataSharingService.isUserLoggedIn.next(true);
         localStorage.setItem('userToken', data.token);
-        
+
         this.router.navigate(['/dashboard']);
         window.location.reload();
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       }
     )
   }

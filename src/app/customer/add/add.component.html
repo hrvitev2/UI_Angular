@@ -1,0 +1,224 @@
+<br />
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="header-action">
+                <button type="button" class="btn btn-primary" [routerLink]="['/customer']">
+                    <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="section-body mt-3">
+    <div class="container-fluid">
+        <div class=" mt-3">
+            <div class="" id="Departments-list" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Add Customer</h2>
+                    </div>
+                    <div class="card-body">
+                        <form class="example-form" [formGroup]="custForm">
+                            <h3 class="card-title">Basic Details</h3>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Bussiness Type</mat-label>
+                                        <mat-select formControlName="businessType">
+                                            <mat-option value="1">Finance</mat-option>
+                                            <mat-option value="2">test</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Organisation Type</mat-label>
+                                        <mat-select formControlName="orgType">
+                                            <mat-option value="1">Consultant</mat-option>
+                                            <mat-option value="2">Corporate</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput formControlName="fName" placeholder="First Name">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput formControlName="lName" placeholder="Last Name">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput formControlName="orgName" placeholder="Organisation Name">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput formControlName="orgShortName"
+                                            placeholder="Organisation Short Name">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput formControlName="propMobile" placeholder="Prop Mobile">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput formControlName="propEmail" placeholder="Prop Email">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput formControlName="designation" placeholder="Designation">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput formControlName="empCount" placeholder="Employee Count">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput formControlName="usersCount" placeholder="Users Count">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field>
+                                        <ngx-mat-file-input placeholder="Users Count" formControlName="portfoliodoc"
+                                            placeholder="Portfolio Document">
+                                            <mat-icon ngxMatFileInputIcon><i class="fa fa-paperclip"></i></mat-icon>
+                                        </ngx-mat-file-input>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <br />
+                            <h3 class="card-title">Location Details <i class="fa fa-plus-circle text-right"
+                                    (click)="addLocation()" aria-hidden=" true"></i></h3>
+                            <div *ngFor="let location of location; let k = index">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput [(ngModel)]="location.name"
+                                                [ngModelOptions]="{standalone: true}" placeholder="Location Name">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput [(ngModel)]="location.area"
+                                                [ngModelOptions]="{standalone: true}" placeholder="Location Area">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput [(ngModel)]="location.city"
+                                                [ngModelOptions]="{standalone: true}" placeholder="Location City">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput [(ngModel)]="location.state"
+                                                [ngModelOptions]="{standalone: true}" placeholder="Location State">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput [(ngModel)]="location.zip"
+                                                [ngModelOptions]="{standalone: true}" placeholder="Location Zip">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput [(ngModel)]="location.landmark"
+                                                [ngModelOptions]="{standalone: true}" placeholder="Location Landmark">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <p>Contact Details <span (click)="addContact(k)" class="text-right"><i
+                                            class="fa fa-plus-circle" aria-hidden="true"></i></span></p>
+                                <div *ngFor="let contact of location.contact">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput [(ngModel)]="contact.fName"
+                                                    [ngModelOptions]="{standalone: true}" placeholder="First Name">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput [(ngModel)]="contact.lName"
+                                                    [ngModelOptions]="{standalone: true}" placeholder="Last Name">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput [(ngModel)]="contact.designation"
+                                                    [ngModelOptions]="{standalone: true}" placeholder="Designation">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput [(ngModel)]="contact.email"
+                                                    [ngModelOptions]="{standalone: true}" placeholder="Email">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput [(ngModel)]="contact.number"
+                                                    [ngModelOptions]="{standalone: true}" placeholder="Number">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                            </div>
+
+                            <h3 class="card-title">socialProfile <span (click)="addSocial()" class="text-right"><i
+                                        class="fa fa-plus-circle" aria-hidden="true"></i></span></h3>
+                            <div class="row" *ngFor="let social of socialProfile">
+                                <div class="col-md-6">
+
+                                    <mat-form-field appearance="fill">
+                                        <mat-label>Type</mat-label>
+                                        <mat-select [(ngModel)]="social.type" [ngModelOptions]="{standalone: true}">
+                                            <mat-option value="0">Facebook</mat-option>
+                                            <mat-option value="1">Linkedin</mat-option>
+                                            <mat-option value="2">Glassdoor</mat-option>
+                                            <mat-option value="3">Twitter</mat-option>
+                                            <mat-option value="4">Instagram</mat-option>
+                                            <mat-option value="5">Github</mat-option>
+                                            <mat-option value="6">Website</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput [(ngModel)]="social.link" [ngModelOptions]="{standalone: true}"
+                                            placeholder="Designation">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <br />
+                        </form>
+                        <button type="button" class="btn btn-primary float-right" (click)="add()">Save</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

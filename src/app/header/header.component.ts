@@ -15,12 +15,12 @@ export class HeaderComponent implements OnInit {
   categoryLists: any = [];
   listactive: any;
   showFiller = false;
-    isFullScreen: boolean;
+  isFullScreen: boolean;
   contactTab: boolean;
   groupTab: boolean;
   chatTab: boolean = true;
   title: any
-  
+
 
 
   constructor(private dataSharingService: DataSharingService, private http: HttpService, private router: Router) {
@@ -29,7 +29,7 @@ export class HeaderComponent implements OnInit {
         this.userDeatils = null;
         this.userDeatils = value[0];
       } else {
-    //    this.getDetails();
+        //    this.getDetails();
       }
     });
 
@@ -84,6 +84,13 @@ export class HeaderComponent implements OnInit {
       docWithBrowsersExitFunctions.msExitFullscreen();
     }
     this.isFullScreen = false;
+  }
+
+  logout() {
+
+    localStorage.clear();
+    window.location.reload();
+
   }
 
   onTab(number) {

@@ -6,12 +6,16 @@ import { HttpService } from '../../http.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { PagerService} from '../../pager.service';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-leave-type',
   templateUrl: './leave-type.component.html',
   styleUrls: ['./leave-type.component.css']
 })
 export class LeaveTypeComponent implements OnInit {
+  searchKey: any;
 
   customerTypeList: any;
   dialogRef: any;
@@ -21,12 +25,20 @@ export class LeaveTypeComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   @ViewChild('template') templateRef: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+
+  statingValue: number;
+  pagers: any = [];
+  lists: any = {};
+  // pager object
+  pager: any = {};
+  // paged items
+  pagedItems: any[];
+  firstPageData: any;
 
 
   displayedColumns: string[] = ['name', 'status', 'actions'];
 
-  constructor(private http: HttpService, public dialog: MatDialog) {
+  constructor(private http: HttpService, public dialog: MatDialog, private pagerService: PagerService, private toastr: ToastrService) {
     this.typeForm = new FormGroup({
       'name': new FormControl("", Validators.required),
     });
@@ -39,22 +51,61 @@ export class LeaveTypeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getList();
+    this.getList(this.searchKey, 1);
   }
 
-  getList() {
-    this.http.getList('leave-type').subscribe(
+  getList(searchKey, pageNo) {
+    let added = 1;
+    if (pageNo != 1) {
+      added = pageNo * 5 + 1 - 5;
+    }
+    this.http.getList('leave-type', searchKey, pageNo).subscribe(
       (data: any) => {
-        this.customerTypeList = data.data.rows;
+        this.customerTypeList = data.data;
         this.dataSource = new MatTableDataSource(this.customerTypeList);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        if (pageNo == 1) {
+          this.setPage(pageNo);
+          this.firstPageData = this.customerTypeList;
+        }
+
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
 
+  setPage(page: number) {
+    if (page < 1 || page > parseInt(this.customerTypeList.count) + 1 / 5) {
+      return;
+    }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(parseInt(this.customerTypeList.count), page, 5);
+    // get current page of items
+    this.pagedItems = this.pager.pages.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
+  }
+  assigndata(page) {
+    let added = 1;
+    if (page != 1) {
+      added = page * 5 + 1 - 5;
+    }
+    this.statingValue = added;
+
+    if (this.statingValue != 1) {
+      this.getList(this.searchKey, page);
+    } else {
+      this.customerTypeList = this.firstPageData;
+    }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(parseInt(this.customerTypeList.count), page, 5);
+    // get current page of items
+    this.pagedItems = this.pager.pages.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
+  }
   addComp() {
     this.typeEditForm.reset();
     this.typeForm.reset();
@@ -65,30 +116,26 @@ export class LeaveTypeComponent implements OnInit {
 
   add() {
     if (this.typeForm.invalid) {
-      alert("Please Fill the Mandatory Details");
+      this.toastr.error("Please Fill the Mandatory Details");
       return false;
     }
     this.http.add('leave-type', this.typeForm.value).subscribe(
       (data: any) => {
-        alert("Added Successfully!");
-        this.getList();
+        this.toastr.success("Added Successfully!");
+        this.getList(this.searchKey, 1);
         this.typeForm.reset();
         this.dialogRef.close();
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
 
-  edit(i) {
-    this.typeEditForm.controls.lId.setValue(i);
-    for (let i = 0; i < this.customerTypeList.length; i++) {
-      if (this.typeEditForm.value.lId == this.customerTypeList[i].id) {
-        this.typeEditForm.controls.name.setValue(this.customerTypeList[i].name);
-        this.typeEditForm.controls.status.setValue(this.customerTypeList[i].status);
-        this.dialogRef = this.dialog.open(this.templateRef);
-      }
-    }
+  edit(data) {
+    this.typeEditForm.controls.lId.setValue(data.id);
+    this.typeEditForm.controls.name.setValue(data.name);
+    this.typeEditForm.controls.status.setValue(data.status);
+    this.dialogRef = this.dialog.open(this.templateRef);
   }
 
   applyFilter(event: Event) {
@@ -103,13 +150,31 @@ export class LeaveTypeComponent implements OnInit {
   update() {
     this.http.update('leave-type', this.typeEditForm.value).subscribe(
       (data: any) => {
-        alert("Updated Successfully!");
+        this.toastr.success("Updated Successfully!");
         this.typeEditForm.reset();
         this.dialogRef.close();
-        this.getList();
+        this.getList(this.searchKey, 1);
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
+
+  delete(data) {
+    if (confirm("Are you sure want to delete?")) {
+      this.typeEditForm.controls.lId.setValue(data.id);
+      this.typeEditForm.controls.name.setValue(data.name);
+      this.typeEditForm.controls.status.setValue('d');
+      this.http.update('leave-type', this.typeEditForm.value).subscribe(
+        (data: any) => {
+          this.toastr.success("Deleted Successfully!");
+          this.typeEditForm.reset();
+          this.getList(this.searchKey, 1);
+        },
+        (error: any) => {
+          this.toastr.error(error.msg);
+        });
+    }
+  }
+
 }

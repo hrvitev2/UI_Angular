@@ -6,12 +6,16 @@ import { HttpService } from '../../http.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { PagerService} from '../../pager.service';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-industry',
   templateUrl: './industry.component.html',
   styleUrls: ['./industry.component.css']
 })
 export class IndustryComponent implements OnInit {
+  searchKey: any;
   industryList: any;
   dialogRef: any;
   industryForm: FormGroup;
@@ -20,11 +24,19 @@ export class IndustryComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   @ViewChild('template') templateRef: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+
+  statingValue: number;
+  pagers: any = [];
+  lists: any = {};
+  // pager object
+  pager: any = {};
+  // paged items
+  pagedItems: any[];
+  firstPageData: any;
 
   displayedColumns: string[] = ['name', 'status', 'actions'];
 
-  constructor(private http: HttpService, public dialog: MatDialog) {
+  constructor(private http: HttpService, public dialog: MatDialog, private pagerService: PagerService, private toastr: ToastrService) {
     this.industryForm = new FormGroup({
       'name': new FormControl("", Validators.required),
     });
@@ -38,20 +50,60 @@ export class IndustryComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getList();
+    this.getList(this.searchKey, 1);
   }
 
-  getList() {
-    this.http.getList('industry').subscribe(
+  getList(searchKey, pageNo) {
+    let added = 1;
+    if (pageNo != 1) {
+      added = pageNo * 5 + 1 - 5;
+    }
+    this.http.getList('industry', searchKey, pageNo).subscribe(
       (data: any) => {
-        this.industryList = data.data.rows;
+        this.industryList = data.data;
         this.dataSource = new MatTableDataSource(this.industryList);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        if (pageNo == 1) {
+          this.setPage(pageNo);
+          this.firstPageData = this.industryList;
+        }
+
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
+  }
+
+  setPage(page: number) {
+    if (page < 1 || page > parseInt(this.industryList.count) + 1 / 5) {
+      return;
+    }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(parseInt(this.industryList.count), page, 5);
+    // get current page of items
+    this.pagedItems = this.pager.pages.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
+  }
+  assigndata(page) {
+    let added = 1;
+    if (page != 1) {
+      added = page * 5 + 1 - 5;
+    }
+    this.statingValue = added;
+
+    if (this.statingValue != 1) {
+      this.getList(this.searchKey, page);
+    } else {
+      this.industryList = this.firstPageData;
+    }
+    // get pager object from service
+    this.pager = this.pagerService.getPager(parseInt(this.industryList.count), page, 5);
+    // get current page of items
+    this.pagedItems = this.pager.pages.slice(
+      this.pager.startIndex,
+      this.pager.endIndex + 1
+    );
   }
 
   addComp() {
@@ -64,30 +116,26 @@ export class IndustryComponent implements OnInit {
 
   add() {
     if (this.industryForm.invalid) {
-      alert("Please Fill the Mandatory Details");
+      this.toastr.error("Please Fill the Mandatory Details");
       return false;
     }
     this.http.add('industry', this.industryForm.value).subscribe(
       (data: any) => {
-        alert("Added Successfully!");
-        this.getList();
+        this.toastr.success("Added Successfully!");
+        this.getList(this.searchKey, 1);
         this.industryForm.reset();
         this.dialogRef.close();
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
 
-  edit(i) {
-    this.industryEditForm.controls.lId.setValue(i);
-    for (let i = 0; i < this.industryList.length; i++) {
-      if (this.industryEditForm.value.lId == this.industryList[i].id) {
-        this.industryEditForm.controls.name.setValue(this.industryList[i].name);
-        this.industryEditForm.controls.status.setValue(this.industryList[i].status);
-        this.dialogRef = this.dialog.open(this.templateRef);
-      }
-    }
+  edit(data) {
+    this.industryEditForm.controls.lId.setValue(data.id);
+    this.industryEditForm.controls.name.setValue(data.name);
+    this.industryEditForm.controls.status.setValue(data.status);
+    this.dialogRef = this.dialog.open(this.templateRef);
   }
 
   applyFilter(event: Event) {
@@ -102,14 +150,30 @@ export class IndustryComponent implements OnInit {
   update() {
     this.http.update('industry', this.industryEditForm.value).subscribe(
       (data: any) => {
-        alert("Updated Successfully!");
+        this.toastr.success("Updated Successfully!");
         this.industryEditForm.reset();
         this.dialogRef.close();
-        this.getList();
+        this.getList(this.searchKey, 1);
       },
       (error: any) => {
-        alert(error.msg);
+        this.toastr.error(error.msg);
       });
   }
 
+  delete(data) {
+    if (confirm("Are you sure want to delete?")) {
+      this.industryEditForm.controls.lId.setValue(data.id);
+      this.industryEditForm.controls.name.setValue(data.name);
+      this.industryEditForm.controls.status.setValue('d');
+      this.http.update('industry', this.industryEditForm.value).subscribe(
+        (data: any) => {
+          this.toastr.success("Deleted Successfully!");
+          this.industryEditForm.reset();
+          this.getList(this.searchKey, 1);
+        },
+        (error: any) => {
+          this.toastr.error(error.msg);
+        });
+    }
+  }
 }
