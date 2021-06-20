@@ -5,8 +5,8 @@
                 <!-- <a href="javascript:void(0)" class="nav-link icon theme_btn"><i class="fa fa-paint-brush"
                             data-toggle="tooltip" data-placement="right" title="Themes"></i></a> -->
                 <a href="javascript:void(0)" class="nav-link user_btn" (click)="toggleUserMenu()">
-                    <img class="avatar" src="../assets/images/user.png" alt="" data-toggle="tooltip" data-placement="right" title="User Menu"
-                    />
+                    <img class="avatar" src="../assets/images/user.png" alt="" data-toggle="tooltip"
+                        data-placement="right" title="User Menu" />
                 </a>
                 <a href="javascript:void(0)" (click)="toggleMenu()" class="nav-link icon menu_toggle">
                     <i class="fa  fa-align-left"></i>
@@ -45,9 +45,10 @@
     <nav id="left-sidebar-nav" class="sidebar-nav">
         <ul class="metismenu">
             <li class="g_heading">Directories</li>
-            <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                <a href="javascript:void(0)" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic"
-                    class="has-arrow arrow-c">
+            <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
+                *ngIf="userType == 1">
+                <a href="javascript:void(0)" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
+                    aria-controls="collapseBasic" class="has-arrow arrow-c">
                     <i class="icon-rocket"></i>
                     <span>Master</span>
                 </a>
@@ -58,71 +59,79 @@
                         </a>
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                        <a class="submenu" [routerLink]="['/department']" href="javascript:void(0)">
+                        <a class="submenu" [routerLink]="['/master/department']" href="javascript:void(0)">
                             <span>Department</span>
                         </a>
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                        <a class="submenu" [routerLink]="['/company']" href="javascript:void(0)">
+                        <a class="submenu" [routerLink]="['/master/company']" href="javascript:void(0)">
                             <span>Company</span>
                         </a>
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                        <a class="submenu" [routerLink]="['/gstcode']" href="javascript:void(0)">
+                        <a class="submenu" [routerLink]="['/master/gstcode']" href="javascript:void(0)">
                             <span>GST State Code</span>
                         </a>
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                        <a class="submenu" [routerLink]="['/sac-code']" href="javascript:void(0)">
+                        <a class="submenu" [routerLink]="['/master/sac-code']" href="javascript:void(0)">
                             <span>SAC Code</span>
                         </a>
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                        <a class="submenu" [routerLink]="['/university']" href="javascript:void(0)">
+                        <a class="submenu" [routerLink]="['/master/university']" href="javascript:void(0)">
                             <span>University</span>
                         </a>
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                        <a class="submenu" [routerLink]="['/customer-type']" href="javascript:void(0)">
+                        <a class="submenu" [routerLink]="['/master/customer-type']" href="javascript:void(0)">
                             <span>Customer Type</span>
                         </a>
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                        <a class="submenu" [routerLink]="['/industry']" href="javascript:void(0)">
+                        <a class="submenu" [routerLink]="['/master/industry']" href="javascript:void(0)">
                             <span>Industry</span>
                         </a>
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                        <a class="submenu" [routerLink]="['/candidate-status']" href="javascript:void(0)">
+                        <a class="submenu" [routerLink]="['/master/candidate-status']" href="javascript:void(0)">
                             <span>Candidate Status</span>
                         </a>
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                        <a class="submenu" [routerLink]="['/leave-type']" href="javascript:void(0)">
+                        <a class="submenu" [routerLink]="['/master/leave-type']" href="javascript:void(0)">
                             <span>Leave Type</span>
                         </a>
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                        <a class="submenu" [routerLink]="['/tax-excemption']" href="javascript:void(0)">
+                        <a class="submenu" [routerLink]="['/master/tax-excemption']" href="javascript:void(0)">
                             <span>Tax Excemption</span>
                         </a>
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                        <a class="submenu" [routerLink]="['/skill']" href="javascript:void(0)">
+                        <a class="submenu" [routerLink]="['/master/skill']" href="javascript:void(0)">
                             <span>Skill</span>
                         </a>
                     </li>
                     <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                        <a class="submenu" [routerLink]="['/customer']" href="javascript:void(0)">
+                        <a class="submenu" [routerLink]="['/master/customer']" href="javascript:void(0)">
                             <span>Customer</span>
                         </a>
                     </li>
                     <!-- <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-                        <a class="submenu" [routerLink]="['/email-template']" href="javascript:void(0)">
+                        <a class="submenu" [routerLink]="['/master/email-template']" href="javascript:void(0)">
                             <span>Email Template</span>
                         </a>
                     </li> -->
                 </ul>
+            </li>
+
+            <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
+                *ngIf="userType == 2">
+                <a href="javascript:void(0)" [routerLink]="['/customer/settings']"  class="has-arrow arrow-c">
+                    <i class="icon-rocket"></i>
+                    <span>Settings</span>
+                </a>
             </li>
 
         </ul>

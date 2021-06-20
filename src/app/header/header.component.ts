@@ -27,16 +27,39 @@ export class HeaderComponent implements OnInit {
     this.dataSharingService.userDetails.subscribe(value => {
       if (value) {
         this.userDeatils = null;
-        this.userDeatils = value[0];
+        this.userDeatils = value;
       } else {
-        //    this.getDetails();
+        this.getDetails();
       }
     });
 
-
+    this.userDeatils = this.parseJwt(localStorage.getItem("userToken"));
+    this.dataSharingService.userType.next(this.userDeatils.data.userType);
     this.dataSharingService.activeStatus.subscribe(value => {
       this.listactive = value;
     });
+  }
+
+  parseJwt(token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+  };
+
+
+  getDetails() {
+
+    this.http.getMyProfile().subscribe(
+      (data: any) => {
+        this.dataSharingService.userDetails.next(data.data);
+      },
+      (error: any) => {
+        //    this.toastr.error(error.msg);
+      });
   }
 
 

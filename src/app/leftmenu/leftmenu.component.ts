@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
+import { DataSharingService } from '../data-sharing.service';
 @Component({
   selector: 'app-leftmenu',
   templateUrl: './leftmenu.component.html',
@@ -29,20 +30,22 @@ export class LeftmenuComponent implements OnInit {
   menuIconSelect: any;
   staticscard: boolean = true;
   friendscard: boolean = true;
-  constructor(private router: Router, @Inject(AppComponent) private app: AppComponent) {
-    if ((this.router.url).includes('hr')) {
-      this.isCollapsed = false;
-    }
+  userDeatils: any;
+  userType: any;
+  constructor(private router: Router, @Inject(AppComponent) private app: AppComponent, private dataSharingService: DataSharingService) {
+    this.dataSharingService.userDetails.subscribe(value => {
+      if (value) {
+        this.userDeatils = null;
+        this.userDeatils = value;
+      } else {
+      }
+    });
 
-    if ((this.router.url).includes('project')) {
-      this.isProjectCollapsed = false;
-    }
-    if ((this.router.url).includes('jobportal')) {
-      this.isJobportalCollapsed = false;
-    }
-    if ((this.router.url).includes('auth')) {
-      this.isAuthCollapsed = false;
-    }
+    this.dataSharingService.userType.subscribe(value => {
+      if (value) {
+        this.userType = value;
+      }
+    });
   }
 
   ngOnInit(): void {

@@ -34,8 +34,9 @@ export class AuthService {
   }
 
   refreshToken() {
+    console.log("coming");
     let headers = new HttpHeaders()
-      .set("Content-Type", "application/json").set("refreshToken", localStorage.getItem("refreshToken"))
+      .set("Content-Type", "application/json").set("refreshToken", localStorage.getItem("userToken"))
     return this.httpClient.get(this.APIURL + 'admin/auth/tokenRegenerate', { headers })
   }
 }

@@ -11,5 +11,6 @@ export class DataSharingService {
     public languageAllList: BehaviorSubject<any> = new BehaviorSubject<any>('');
     public categoryAllList: BehaviorSubject<any> = new BehaviorSubject<any>('');
     public roles: BehaviorSubject<any> = new BehaviorSubject<any>('');
+    public userType: BehaviorSubject<any> = new BehaviorSubject<any>('');
     public activeStatus: BehaviorSubject<any> = new BehaviorSubject<any>('');
 }

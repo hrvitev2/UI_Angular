@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private Auth: AuthService, private dataSharingService: DataSharingService, private _snackBar: MatSnackBar, private toastr: ToastrService) {
 
     this.loginForm = new FormGroup({
-      'username': new FormControl("", [Validators.required, Validators.email]),
+      'username': new FormControl("", Validators.required),
       'password': new FormControl("", Validators.required),
     });
 
