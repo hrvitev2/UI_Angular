@@ -8,40 +8,43 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="card menu">
-                            <div class="link active" [routerLink]="['/customer/settings']">
+                            <div class="link active " [routerLink]="['/customer/settings']">
                                 <span class="text">Profile Settings</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings/department']">
+                            <div class="link " [routerLink]="['/customer/settings/department']">
                                 <span class="text">Department</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link " [routerLink]="['/customer/settings/attendance-management']">
                                 <span class="text">Attendance Management</span>
                             </div>
                             <div class="link" [routerLink]="['/customer/settings/leave-management']">
                                 <span class="text">Leave Management</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link " [routerLink]="['/customer/settings/holiday']">
+                                <span class="text">Holidays</span>
+                            </div>
+                            <div class="link " [routerLink]="['/customer/settings/notice-period']">
                                 <span class="text">Notice Period</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings/salary-breakups']">
-                                <span class="text">Salary Breakups</span>
+                            <div class="link" [routerLink]="['/customer/settings/payroll']">
+                                <span class="text">Payroll Calculation</span>
                             </div>
                             <div class="link" [routerLink]="['/customer/settings/payslip-breakups']">
                                 <span class="text">Payslip Breakups</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings/payroll']">
-                                <span class="text">Payroll Managements</span>
+                            <div class="link" [routerLink]="['/customer/settings/salary-breakups']">
+                                <span class="text">Salary Breakups</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/statutory']">
                                 <span class="text">Statutory</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/ta-management']">
                                 <span class="text">TA Management</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/designation']">
                                 <span class="text">Designaton's</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/emp-id']">
                                 <span class="text">Emp Id Management</span>
                             </div>
                         </div>
@@ -217,7 +220,7 @@
                                         <br />
                                     </div>
 
-                                    <h3 class="card-title">socialProfile <span (click)="addSocial()"
+                                    <h3 class="card-title">social Profile <span (click)="addSocial()"
                                             class="text-right"><i class="fa fa-plus-circle"
                                                 aria-hidden="true"></i></span></h3>
                                     <div class="row" *ngFor="let social of socialProfile">
@@ -250,6 +253,10 @@
                                     (click)="updateProfile()">Save</button>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="card">
+                        
                     </div>
                 </div>
             </div>

@@ -1,1 +1,149 @@
-<p>ta-management works!</p>
+<br />
+
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="header-action">
+                <!-- <button type="button" class="btn btn-primary" (click)="addDept()">
+                    <i class="fe fe-plus mr-2"></i>Add</button> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section-body mt-3">
+    <div class="container-fluid">
+        <div class=" mt-3">
+            <div class="" id="Departments-list" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card menu">
+                            <div class="link " [routerLink]="['/customer/settings']">
+                                <span class="text">Profile Settings</span>
+                            </div>
+                            <div class="link " [routerLink]="['/customer/settings/department']">
+                                <span class="text">Department</span>
+                            </div>
+                            <div class="link " [routerLink]="['/customer/settings/attendance-management']">
+                                <span class="text">Attendance Management</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/leave-management']">
+                                <span class="text">Leave Management</span>
+                            </div>
+                            <div class="link " [routerLink]="['/customer/settings/holiday']">
+                                <span class="text">Holidays</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/notice-period']">
+                                <span class="text">Notice Period</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/payroll']">
+                                <span class="text">Payroll Calculation</span>
+                            </div>
+                            <div class="link " [routerLink]="['/customer/settings/payslip-breakups']">
+                                <span class="text">Payslip Breakups</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/salary-breakups']">
+                                <span class="text">Salary Breakups</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/statutory']">
+                                <span class="text">Statutory</span>
+                            </div>
+                            <div class="link active" [routerLink]="['/customer/settings/ta-management']">
+                                <span class="text">TA Management</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/designation']">
+                                <span class="text">Designaton's</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/emp-id']">
+                                <span class="text">Emp Id Management</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">TA Management</h3>
+                                <div class="card-options">
+                                    <form>
+                                        <div class="input-group">
+                                            <!-- <input type="text" class="form-control form-control-sm"
+                                                [(ngModel)]="searchKey" (input)="getList(searchKey, 1)"
+                                                placeholder="Search something..." name="s"> -->
+                                            <!-- <span class="input-group-btn ml-2">
+                                                <button class="btn btn-icon" (click)="getList(searchKey)" type="submit">
+                                                    <span class="fe fe-search"></span>
+                                                </button>
+                                            </span> -->
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form class="example-form" [formGroup]="forms">
+
+                                    <div class="row clearfix">
+                                        <div class="col-md-4">
+                                            <mat-slide-toggle class="inline" [(ngModel)]="closeJobAfter"
+                                                ngDefaultControl [ngModelOptions]="{standalone: true}" [checked]="true"
+                                                [labelPosition]="'before'">Close Jobs
+                                                Automatically
+                                            </mat-slide-toggle>
+                                        </div>
+                                        <div class="col-md-4" *ngIf="closeJobAfter">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput formControlName="closeJobAfter"
+                                                    placeholder="Job Will Be closed">
+                                            </mat-form-field>
+                                        </div>
+
+                                    </div>
+
+                                    <br />
+
+                                    <div class="row clearfix">
+                                        <div class="col-md-4">
+                                            <mat-slide-toggle class="inline" [(ngModel)]="unAssignJobEMPAfter"
+                                                ngDefaultControl [ngModelOptions]="{standalone: true}" [checked]="true"
+                                                [labelPosition]="'before'">Unassigned job
+                                                Automatically to team memeber
+                                                if NO activity
+                                            </mat-slide-toggle>
+                                        </div>
+                                        <div class="col-md-4" *ngIf="unAssignJobEMPAfter">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput formControlName="unAssignJobEMPAfter"
+                                                    placeholder="Job Will Be Assigned in">
+                                            </mat-form-field>
+                                        </div>
+
+                                    </div>
+                                    <br />
+
+                                    <div class="row clearfix">
+                                        <div class="col-md-4">
+                                            <mat-slide-toggle class="inline" [(ngModel)]="unAssignJobVendorAfter"
+                                                ngDefaultControl [ngModelOptions]="{standalone: true}" [checked]="true"
+                                                [labelPosition]="'before'">Unassigned job
+                                                Automatically to VENDORS
+                                                if NO activity
+                                            </mat-slide-toggle>
+                                        </div>
+                                        <div class="col-md-4" *ngIf="unAssignJobVendorAfter">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput formControlName="unAssignJobVendorAfter"
+                                                    placeholder="Job Will Be Assigned in">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+
+                                </form>
+                                <button type="button" class="btn btn-primary float-right" (click)="add()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

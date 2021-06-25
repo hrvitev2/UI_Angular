@@ -65,7 +65,8 @@ export class AttendanceManagementComponent implements OnInit {
         this.forms.controls.workingHours.setValue(this.lists.workingHours);
         this.forms.controls.halfDayHours.setValue(this.lists.halfDayHours);
         this.forms.controls.lopHours.setValue(this.lists.lopHours);
-          console.log(this.lists)
+        this.shiftDetails = this.lists.shiftTimings;
+        console.log(this.lists)
       },
       (error: any) => {
         this.toastr.error(error.msg);
@@ -81,14 +82,16 @@ export class AttendanceManagementComponent implements OnInit {
   }
   add() {
 
-    this.forms.controls.status.setValue("a");
+  //  this.forms.controls.status.setValue("a");
 
     if (this.forms.invalid) {
       this.toastr.error("Please Fill the Mandatory Details");
       return false;
     }
 
-    this.http.addDataCustomer('payroll', this.forms.value).subscribe(
+    this.forms.controls.shiftDetails.setValue(this.shiftDetails);
+
+    this.http.addDataCustomer('attendance', this.forms.value).subscribe(
       (data: any) => {
         this.toastr.success("Added Successfully!");
         this.getList();

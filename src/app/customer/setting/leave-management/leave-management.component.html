@@ -1,5 +1,15 @@
 <br />
 
+<div class="section-body">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="header-action">
+                <!-- <button type="button" class="btn btn-primary" (click)="addDept()">
+                    <i class="fe fe-plus mr-2"></i>Add</button> -->
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="section-body mt-3">
     <div class="container-fluid">
@@ -11,71 +21,256 @@
                             <div class="link " [routerLink]="['/customer/settings']">
                                 <span class="text">Profile Settings</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link " [routerLink]="['/customer/settings/department']">
                                 <span class="text">Department</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/attendance-management']">
                                 <span class="text">Attendance Management</span>
                             </div>
                             <div class="link active" [routerLink]="['/customer/settings/leave-management']">
                                 <span class="text">Leave Management</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/holiday']">
+                                <span class="text">Holidays</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/notice-period']">
                                 <span class="text">Notice Period</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/payroll']">
                                 <span class="text">Payroll Calculation</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link " [routerLink]="['/customer/settings/payslip-breakups']">
+                                <span class="text">Payslip Breakups</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/salary-breakups']">
+                                <span class="text">Salary Breakups</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/statutory']">
                                 <span class="text">Statutory</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/ta-management']">
                                 <span class="text">TA Management</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/designation']">
                                 <span class="text">Designaton's</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/emp-id']">
                                 <span class="text">Emp Id Management</span>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-9">
-                        <div class="card ">
+                        <div class="card">
                             <div class="card-header">
-                                <h2 class="card-title">Holiday Management</h2>
+                                <h3 class="card-title">Leave Management</h3>
+                                <div class="card-options">
+                                    <form>
+                                        <div class="input-group">
+                                            <!-- <input type="text" class="form-control form-control-sm"
+                                                [(ngModel)]="searchKey" (input)="getList(searchKey, 1)"
+                                                placeholder="Search something..." name="s"> -->
+                                            <!-- <span class="input-group-btn ml-2">
+                                                <button class="btn btn-icon" (click)="getList(searchKey)" type="submit">
+                                                    <span class="fe fe-search"></span>
+                                                </button>
+                                            </span> -->
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                             <div class="card-body">
+                                <form class="example-form" [formGroup]="forms">
+                                    <div class="row clearfix">
+                                        <div class="col-md-3">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput type="number" formControlName="totalLeave"
+                                                    placeholder="Total Leave">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Leave will be added</mat-label>
+                                                <mat-select formControlName="leaveAddCycle">
+                                                    <mat-option value="1">On Month End</mat-option>
+                                                    <mat-option value="2">On Month Starting</mat-option>
+                                                    <mat-option value="3">On Month Date</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Leaves Calendar Period</mat-label>
+                                                <mat-select formControlName="calendarPeriod">
+                                                    <mat-option value="1">Jan - Dec</mat-option>
+                                                    <mat-option value="2">April - May</mat-option>
+                                                    <mat-option value="3">Oct - Sep</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Half Days Will be</mat-label>
+                                                <mat-select formControlName="halfDayLeaveWillBe">
+                                                    <mat-option value="1">Consider as SL</mat-option>
+                                                    <mat-option value="2">Consider as CL</mat-option>
+                                                    <mat-option value="3">Consider as CO</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <button class="btn btn-primary float-right"
+                                                (click)="addShift()">Add</button>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row clearfix" *ngFor="let val of leaveDetails">
+                                        <div class="col-md-6">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Leave Type List</mat-label>
+                                                <mat-select [(ngModel)]="val.leaveTypeId" ngDefaultControl
+                                                    [ngModelOptions]="{standalone: true}">
+                                                    <mat-option value="1">Casual</mat-option>
+                                                    <mat-option value="2">Sick</mat-option>
+                                                    <mat-option value="3">Maternity</mat-option>
+                                                    <mat-option value="4">Paternity</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-6">
 
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-vcenter table-hover mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>Department Name</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let data of lists">
-                                                <td>
-                                                    <div class="font-15">{{data?.name}}</div>
-                                                </td>
-                                                <td>
-                                                    <span *ngIf="data.status == 'a'">Active</span>
-                                                    <span *ngIf="data.status == 'i'">inActive</span>
-                                                </td>
-                                                <td>
-                                                    <button type="button" (click)="edit(data)" class="btn btn-icon"
-                                                        title="Edit">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                            <mat-form-field class="example-full-width" ngDefaultControl
+                                                [(ngModel)]="val.days" [ngModelOptions]="{standalone: true}">
+                                                <input matInput type="number" placeholder="Days">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <mat-slide-toggle formControlName="yearlyCarryForward" [checked]="true"
+                                                [labelPosition]="'before'">Leaves yearly carry forward
+                                            </mat-slide-toggle>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-slide-toggle formControlName="yearlyEncash"
+                                                [checked]="true" [labelPosition]="'before'">
+                                                Leaves can be in Cashed
+                                            </mat-slide-toggle>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-slide-toggle formControlName="monthlyCarryForward"
+                                                [labelPosition]="'before'" [checked]="true">
+                                                Leaves Monthly
+                                                carry forward
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Type</mat-label>
+                                                <mat-select formControlName="carryForwardOrEncashtype">
+                                                    <mat-option value="1">All Leaves</mat-option>
+                                                    <mat-option value="2">1/4 of leaves</mat-option>
+                                                    <mat-option value="3">1/2 of leaves</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>To Avail ML/PL Employee has to comeplete</mat-label>
+                                                <mat-select formControlName="availMlPlAfter">
+                                                    <mat-option value="1">3 Months from DOJ</mat-option>
+                                                    <mat-option value="2">6 Months from DOJ</mat-option>
+                                                    <mat-option value="3">9 Months from DOJ</mat-option>
+                                                    <mat-option value="4">12 Months from DOJ</mat-option>
+                                                    <mat-option value="5">18 Months from DOJ</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <h3 class="card-title">
+                                        <mat-slide-toggle [(ngModel)]="probValue" ngDefaultControl
+                                            [ngModelOptions]="{standalone: true}" [checked]="true"
+                                            [labelPosition]="'before'">Probationary
+                                            Employee
+                                            Leaves
+                                        </mat-slide-toggle>
+                                    </h3>
+                                    <div *ngIf="probValue">
+                                        <div class="row clearfix">
+                                            <div class="col-md-3">
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Probationary Months</mat-label>
+                                                    <mat-select formControlName="probationTotalLeave">
+                                                        <mat-option value="0">NA</mat-option>
+                                                        <mat-option value="1">3 Months</mat-option>
+                                                        <mat-option value="2">6 Months</mat-option>
+                                                        <mat-option value="3">9 Months</mat-option>
+                                                        <mat-option value="4">12 Months</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button class="btn btn-primary float-right"
+                                                    (click)="addProbation()">Add</button>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="row clearfix" *ngFor="let val of probationleaveDetails">
+                                            <div class="col-md-6">
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Leave Type List</mat-label>
+                                                    <mat-select [(ngModel)]="val.leaveTypeId" ngDefaultControl
+                                                        [ngModelOptions]="{standalone: true}">
+                                                        <mat-option value="1">Casual</mat-option>
+                                                        <mat-option value="2">Sick</mat-option>
+                                                        <mat-option value="3">Maternity</mat-option>
+                                                        <mat-option value="4">Paternity</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-6">
 
-                                </div>
+                                                <mat-form-field class="example-full-width" ngDefaultControl
+                                                    [(ngModel)]="val.days" [ngModelOptions]="{standalone: true}">
+                                                    <input matInput type="number" placeholder="Days">
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row clearfix">
+                                            <div class="col-md-3">
+                                                <mat-form-field appearance="fill">
+                                                    <mat-label>Half Day will be</mat-label>
+                                                    <mat-select formControlName="probationHalfDayLeaveWillBe">
+                                                        <mat-option value="1">Consider as</mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+
+                                                <mat-slide-toggle formControlName="probationMonthlyCarryForward"
+                                                    [checked]="true" [labelPosition]="'before'">Leaves Monthly carry
+                                                    forward
+                                                </mat-slide-toggle>
+                                            </div>
+                                            <div class="col-md-5">
+
+                                                <mat-slide-toggle formControlName="probToPermanentCarryForward"
+                                                    [checked]="true" [labelPosition]="'before'">Leaves Monthly carry
+                                                    forward to
+                                                    Permanent
+                                                </mat-slide-toggle>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <button type="button" class="btn btn-primary float-right" (click)="add()">Save</button>
                             </div>
                         </div>
                     </div>

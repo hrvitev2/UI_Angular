@@ -233,8 +233,6 @@ export class HttpService {
   customerGet(type) {
     let endPoint;
     switch (type) {
-      case 'leave':
-        endPoint = "customer/leave/listHolidays"; break;
       case 'department':
         endPoint = "customer/customer/department/list"; break;
     }
@@ -245,6 +243,17 @@ export class HttpService {
   }
 
 
+  customerGetAll(type) {
+    let endPoint;
+    switch (type) {
+      case 'department':
+        endPoint = "customer/department/list"; break;
+    }
+    let headers = new HttpHeaders()
+      .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
+
+    return this.httpClient.get(this.APIURL + endPoint, { headers })
+  }
 
   getListCustomer(type, key, page) {
     let ps = page - 1;
@@ -256,6 +265,10 @@ export class HttpService {
         endPoint = "customer/breakups/list"; break;
       case 'payroll':
         endPoint = "customer/payroll/list"; break;
+      case 'holiday':
+        endPoint = "customer/leave/listHolidays"; break;
+      case 'designation':
+        endPoint = "customer/designation/list"; break;
     }
     let headers = new HttpHeaders()
       .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token).set("offset", ps.toString()).set("limit", '5');
@@ -268,6 +281,19 @@ export class HttpService {
     return this.httpClient.get(this.APIURL + endPoint, { headers })
   }
 
+  getListCustomerBreakups(type, key, page) {
+    let ps = page - 1;
+    let headers = new HttpHeaders()
+      .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token).set("offset", ps.toString()).set("limit", '5').set("type", type);
+
+
+    if (key) {
+      headers = new HttpHeaders()
+        .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token).set("filter", key).set("offset", ps.toString()).set("limit", '5').set("type", type);
+    }
+    return this.httpClient.get(this.APIURL + 'customer/breakups/list', { headers })
+  }
+
   addDataCustomer(type, body) {
     let endPoint;
     switch (type) {
@@ -277,6 +303,18 @@ export class HttpService {
         endPoint = "customer/breakups/config"; break;
       case 'payroll':
         endPoint = "customer/payroll/config"; break;
+      case 'holiday':
+        endPoint = "customer/leave/addHoliday"; break;
+      case 'attendance':
+        endPoint = "customer/attendance/config"; break;
+      case 'leave':
+        endPoint = "customer/leave/config"; break;
+      case 'notice-period':
+        endPoint = "customer/noticePeriod/config"; break;
+      case 'ta':
+        endPoint = "customer/ta/config"; break;
+      case 'designation':
+        endPoint = "customer/designation/add"; break;
     }
     let headers = new HttpHeaders()
       .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
@@ -290,6 +328,8 @@ export class HttpService {
         endPoint = "customer/department/update"; break;
       case 'salary':
         endPoint = "customer/breakups/update"; break;
+      case 'holiday':
+        endPoint = "customer/leave/editHoliday"; break;
     }
     let headers = new HttpHeaders()
       .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
@@ -302,10 +342,24 @@ export class HttpService {
     switch (type) {
       case 'attendance':
         endPoint = "customer/attendance/view"; break;
+      case 'leave':
+        endPoint = "customer/leave/viewLeaveSettings"; break;
+      case 'notice-period':
+        endPoint = "customer/noticePeriod/view"; break;
+      case 'ta-management':
+        endPoint = "customer/ta/view"; break;
     }
     let headers = new HttpHeaders()
       .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
 
     return this.httpClient.get(this.APIURL + endPoint, { headers })
+  }
+
+
+  export() {
+    let headers = new HttpHeaders()
+      .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
+
+    return this.httpClient.get(this.APIURL + 'customer/leave/exportHolidayHeader', { headers })
   }
 }

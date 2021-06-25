@@ -18,36 +18,48 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="card menu">
+                            
+                        <div class="card menu">
                             <div class="link " [routerLink]="['/customer/settings']">
                                 <span class="text">Profile Settings</span>
                             </div>
                             <div class="link active" [routerLink]="['/customer/settings/department']">
                                 <span class="text">Department</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/attendance-management']">
                                 <span class="text">Attendance Management</span>
                             </div>
                             <div class="link" [routerLink]="['/customer/settings/leave-management']">
                                 <span class="text">Leave Management</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/holiday']">
+                                <span class="text">Holidays</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/notice-period']">
                                 <span class="text">Notice Period</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/payroll']">
                                 <span class="text">Payroll Calculation</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link " [routerLink]="['/customer/settings/payslip-breakups']">
+                                <span class="text">Payslip Breakups</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/salary-breakups']">
+                                <span class="text">Salary Breakups</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/statutory']">
                                 <span class="text">Statutory</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/ta-management']">
                                 <span class="text">TA Management</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/designation']">
                                 <span class="text">Designaton's</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/emp-id']">
                                 <span class="text">Emp Id Management</span>
                             </div>
+                        </div>
                         </div>
                     </div>
                     <div class="col-md-9">
@@ -57,8 +69,9 @@
                                 <div class="card-options">
                                     <form>
                                         <div class="input-group">
-                                            <input type="text" class="form-control form-control-sm" [(ngModel)]="searchKey" (input)="getDepartmentList(searchKey, 1)" placeholder="Search something..."
-                                                name="s">
+                                            <input type="text" class="form-control form-control-sm"
+                                                [(ngModel)]="searchKey" (input)="getDepartmentList(searchKey, 1)"
+                                                placeholder="Search something..." name="s">
                                             <!-- <span class="input-group-btn ml-2">
                                                 <button class="btn btn-icon" (click)="getDepartmentList(searchKey)" type="submit">
                                                     <span class="fe fe-search"></span>
@@ -88,10 +101,12 @@
                                                     <span *ngIf="data.status == 'i'">inActive</span>
                                                 </td>
                                                 <td>
-                                                    <button type="button" (click)="edit(data)" class="btn btn-icon" title="Edit">
+                                                    <button type="button" (click)="edit(data)" class="btn btn-icon"
+                                                        title="Edit">
                                                         <i class="fa fa-edit"></i>
                                                     </button>
-                                                    <button type="button" class="btn btn-icon js-sweetalert" (click)="delete(data)" title="Delete" data-type="confirm">
+                                                    <button type="button" class="btn btn-icon js-sweetalert"
+                                                        (click)="delete(data)" title="Delete" data-type="confirm">
                                                         <i class="fa fa-trash-o text-danger"></i>
                                                     </button>
                                                 </td>
@@ -108,7 +123,8 @@
                                     <span *ngIf="lists?.data.length < 10">{{lists.data?.length}}</span> of {{lists?.total}} items</small> -->
                                         </div>
                                         <div class="col-sm-4 text-right text-center-xs">
-                                            <ul class="pagination pagination-sm m-t-none m-b-none" *ngIf="pager?.totalPages != 1">
+                                            <ul class="pagination pagination-sm m-t-none m-b-none"
+                                                *ngIf="pager?.totalPages != 1">
                                                 <li>
                                                     <button class="page-link" [disabled]="pager.currentPage === 0"
                                                         (click)="assigndata(0)">
@@ -122,17 +138,20 @@
                                                     </button>
                                                 </li>
                                                 <li *ngFor="let page of pager.pages">
-                                                    <button class="page-link" [ngClass]="{active:pager.currentPage === page}"
+                                                    <button class="page-link"
+                                                        [ngClass]="{active:pager.currentPage === page}"
                                                         (click)="assigndata(page)">{{page}}</button>
                                                 </li>
                                                 <li>
-                                                    <button class="page-link" [disabled]="pager.currentPage === pager.totalPages"
+                                                    <button class="page-link"
+                                                        [disabled]="pager.currentPage === pager.totalPages"
                                                         (click)="assigndata(pager.currentPage + 1)">
                                                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                                                     </button>
                                                 </li>
                                                 <li>
-                                                    <button class="page-link" [disabled]="pager.currentPage === pager.totalPages"
+                                                    <button class="page-link"
+                                                        [disabled]="pager.currentPage === pager.totalPages"
                                                         (click)="assigndata(pager.totalPages)">
                                                         <i class="fa fa-angle-double-right" aria-hidden="true"></i>
                                                     </button>

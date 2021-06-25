@@ -27,7 +27,6 @@ export class ProfileComponent implements OnInit {
       "id": "",
       "fname": "",
       "lname": "",
-      "designation": "",
       "mobile": "",
       "email": ""
     }]
@@ -65,7 +64,6 @@ export class ProfileComponent implements OnInit {
     });
   }
   asignValue(value) {
-    console.log(value);
     this.custForm.controls.orgName.setValue(value.userBusinessInfo.orgName);
     this.custForm.controls.orgShortName.setValue(value.userBusinessInfo.orgShortName);
     this.custForm.controls.empCount.setValue(value.userBusinessInfo.empCount);
@@ -96,7 +94,6 @@ export class ProfileComponent implements OnInit {
       contactInfos: [{
         "fname": "",
         "lname": "",
-        "designation": "",
         "mobile": "",
         "email": ""
       }]
@@ -145,8 +142,9 @@ export class ProfileComponent implements OnInit {
         }
       }
     }
-    if (this.file) {
+    if (this.custForm.value.portfoliodoc) {
       this.file = this.custForm.value.portfoliodoc;
+      console.log(this.file)
       this.custForm.controls.portfoliodoc.setValue(this.file.name)
       this.upload();
     } else {
@@ -230,6 +228,11 @@ export class ProfileComponent implements OnInit {
   }
 
   updateLocation(type, data) {
+    console.log(data, type);
+
+    if (type == "contactLocation") {
+      delete data.designation;
+    }
     this.http.updateCustomer(type, data).subscribe(
       (data: any) => {
         this.getDetails();

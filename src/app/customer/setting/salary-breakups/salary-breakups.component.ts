@@ -53,7 +53,7 @@ export class SalaryBreakupsComponent implements OnInit {
       added = pageNo * 5 + 1 - 5;
     }
     this.statingValue = added;
-    this.http.getListCustomer('salary', searchKey, pageNo).subscribe(
+    this.http.getListCustomerBreakups('1', searchKey, pageNo).subscribe(
       (data: any) => {
         this.deptList = data.data;
         this.dataSource = new MatTableDataSource(this.deptList);

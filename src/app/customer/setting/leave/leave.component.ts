@@ -9,21 +9,22 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PagerService } from '../../../pager.service';
 import { ToastrService } from 'ngx-toastr';
 
+
 @Component({
-  selector: 'app-designations',
-  templateUrl: './designations.component.html',
-  styleUrls: ['./designations.component.css']
+  selector: 'app-leave',
+  templateUrl: './leave.component.html',
+  styleUrls: ['./leave.component.css']
 })
-export class DesignationsComponent implements OnInit {
+export class LeaveComponent implements OnInit {
 
   searchKey: string;
   editId: any;
-  deptList: any;
   dialogRef: any;
   forms: FormGroup;
   displayedColumns: string[] = ['name', 'status', 'actions'];
   dataSource: MatTableDataSource<any>;
   @ViewChild('template') templateRef: TemplateRef<any>;
+  @ViewChild('viewTemplate') viewTemplate: TemplateRef<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   statingValue: number;
   pagers: any = [];
@@ -33,33 +34,30 @@ export class DesignationsComponent implements OnInit {
   // paged items
   pagedItems: any[];
   firstPageData: any;
-
-  ngOnInit(): void {
-    this.getDepartmentList();
-    this.getLists(this.searchKey, 1);
-  }
-
+  viewDetails: any;
 
   constructor(private http: HttpService, public dialog: MatDialog, private pagerService: PagerService, private toastr: ToastrService) {
     this.forms = new FormGroup({
-      'departmentId': new FormControl("", Validators.required),
       'title': new FormControl("", Validators.required),
-      'from': new FormControl("", Validators.required),
-      'to': new FormControl("", Validators.required)
+      'dateFrom': new FormControl("", Validators.required),
+      'dateTo': new FormControl("", Validators.required),
+      'type': new FormControl("")
     });
   }
 
+  ngOnInit(): void {
+    this.getLists(this.searchKey, 1);
+  }
 
   getLists(searchKey, pageNo) {
     let added = 1;
     if (pageNo != 1) {
       added = pageNo * 5 + 1 - 5;
     }
-    this.statingValue = added;
-    this.http.getListCustomer('designation', searchKey, pageNo).subscribe(
+    this.http.getListCustomer('holiday', searchKey, pageNo).subscribe(
       (data: any) => {
         this.lists = data.data;
-        this.dataSource = new MatTableDataSource(this.lists);
+        console.log(this.lists)
         if (pageNo == 1) {
           this.setPage(pageNo);
           this.firstPageData = this.lists;
@@ -70,15 +68,51 @@ export class DesignationsComponent implements OnInit {
       });
   }
 
-  getDepartmentList() {
-    this.http.customerGetAll('department').subscribe(
+
+  addDept() {
+    this.editId = null;
+    this.forms.reset();
+    this.dialogRef = this.dialog.open(this.templateRef);
+
+    this.dialogRef.afterClosed().subscribe(result => {
+    });
+
+  }
+
+  add() {
+
+    if (this.editId) {
+      this.update();
+      return false;
+    }
+
+    if (this.forms.invalid) {
+      this.toastr.error("Please Fill the Mandatory Details");
+      return false;
+    }
+
+    this.http.addDataCustomer('holiday', this.forms.value).subscribe(
       (data: any) => {
-        this.deptList = data.data;
+        this.toastr.success("Added Successfully!");
+        this.getLists(this.searchKey, 1);
+        this.dialogRef.close();
       },
       (error: any) => {
         this.toastr.error(error.msg);
       });
   }
+
+  edit(data) {
+    this.editId = data.id;
+    this.forms.controls.title.setValue(data.title);
+    this.forms.controls.dateFrom.setValue(data.dateFrom);
+    this.forms.controls.dateTo.setValue(data.dateTo);
+    this.forms.controls.type.setValue(data.type);
+    this.dialogRef = this.dialog.open(this.templateRef);
+
+  }
+
+
   setPage(page: number) {
     if (page < 1 || page > parseInt(this.lists.count) + 1 / 5) {
       return;
@@ -92,15 +126,44 @@ export class DesignationsComponent implements OnInit {
     );
   }
 
-  addDept() {
-    this.editId = null;
-    this.forms.reset();
-    this.dialogRef = this.dialog.open(this.templateRef);
-
-    this.dialogRef.afterClosed().subscribe(result => {
-    });
-
+  update() {
+    let body = { "hId": this.editId, "title": this.forms.value.title, "dateFrom": this.forms.value.dateFrom, "dateTo": this.forms.value.dateTo, "type": this.forms.value.type }
+    this.http.updateDataCustomer('holiday', body).subscribe(
+      (data: any) => {
+        this.toastr.success("Updated Successfully!");
+        this.editId = null;
+        this.dialogRef.close();
+        this.getLists(this.searchKey, 1);
+      },
+      (error: any) => {
+        this.toastr.error(error.msg);
+      });
   }
+
+  export() {
+    this.http.export().subscribe(
+      (data: any) => {
+        console.log(data);
+      },
+      (error: any) => {
+        this.toastr.error(error.msg);
+      });
+  }
+
+  delete(data) {
+    if (confirm("Are you sure want to delete?")) {
+      let body = { "hId": data.id, "status": 'd', 'name': data.name };
+      this.http.updateDataCustomer('holiday', body).subscribe(
+        (data: any) => {
+          this.toastr.success("Deleted Successfully!");
+          this.getLists(this.searchKey, 1);
+        },
+        (error: any) => {
+          this.toastr.error(error.msg);
+        });
+    }
+  }
+
 
   assigndata(page) {
     let added = 1;
@@ -123,61 +186,4 @@ export class DesignationsComponent implements OnInit {
     );
   }
 
-  add() {
-
-    if (this.editId) {
-      this.update();
-      return false;
-    }
-
-    if (this.forms.invalid) {
-      this.toastr.error("Please Fill the Mandatory Details");
-      return false;
-    }
-
-    this.http.addDataCustomer('designation', this.forms.value).subscribe(
-      (data: any) => {
-        this.toastr.success("Added Successfully!");
-        this.getLists(this.searchKey, 1);
-        this.dialogRef.close();
-      },
-      (error: any) => {
-        this.toastr.error(error.msg);
-      });
-  }
-
-  edit(data) {
-    this.editId = data.id;
-    this.forms.controls.name.setValue(data.name);
-    this.dialogRef = this.dialog.open(this.templateRef);
-
-  }
-
-  update() {
-    let body = { "dId": this.editId, "name": this.forms.value.name }
-    this.http.updateDataCustomer('department', body).subscribe(
-      (data: any) => {
-        this.toastr.success("Updated Successfully!");
-        this.editId = null;
-        this.dialogRef.close();
-        this.getLists(this.searchKey, 1);
-      },
-      (error: any) => {
-        this.toastr.error(error.msg);
-      });
-  }
-
-  delete(data) {
-    if (confirm("Are you sure want to delete?")) {
-      let body = { "dId": data.id, "status": 'd', 'name': data.name };
-      this.http.updateDataCustomer('designation', body).subscribe(
-        (data: any) => {
-          this.toastr.success("Deleted Successfully!");
-          this.getLists(this.searchKey, 1);
-        },
-        (error: any) => {
-          this.toastr.error(error.msg);
-        });
-    }
-  }
 }

@@ -21,31 +21,40 @@
                             <div class="link " [routerLink]="['/customer/settings']">
                                 <span class="text">Profile Settings</span>
                             </div>
-                            <div class="link active" [routerLink]="['/customer/settings/department']">
+                            <div class="link " [routerLink]="['/customer/settings/department']">
                                 <span class="text">Department</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link active" [routerLink]="['/customer/settings/attendance-management']">
                                 <span class="text">Attendance Management</span>
                             </div>
                             <div class="link" [routerLink]="['/customer/settings/leave-management']">
                                 <span class="text">Leave Management</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link " [routerLink]="['/customer/settings/holiday']">
+                                <span class="text">Holidays</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/notice-period']">
                                 <span class="text">Notice Period</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/payroll']">
                                 <span class="text">Payroll Calculation</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link " [routerLink]="['/customer/settings/payslip-breakups']">
+                                <span class="text">Payslip Breakups</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/salary-breakups']">
+                                <span class="text">Salary Breakups</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/statutory']">
                                 <span class="text">Statutory</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/ta-management']">
                                 <span class="text">TA Management</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/designation']">
                                 <span class="text">Designaton's</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/emp-id']">
                                 <span class="text">Emp Id Management</span>
                             </div>
                         </div>
@@ -77,7 +86,7 @@
                                                 <mat-label>Auto Logout As Shift Timing</mat-label>
                                                 <mat-select formControlName="autoLogout">
                                                     <mat-option value="1">Yes</mat-option>
-                                                    <mat-option value="2">No</mat-option>
+                                                    <mat-option value="0">No</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
@@ -86,7 +95,7 @@
                                                 <mat-label>Auto Leave - Absent not Applied</mat-label>
                                                 <mat-select formControlName="autoBreak">
                                                     <mat-option value="1">Yes</mat-option>
-                                                    <mat-option value="2">No</mat-option>
+                                                    <mat-option value="0">No</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
@@ -95,20 +104,20 @@
                                         <div class="col-md-6">
                                             <mat-form-field appearance="fill">
                                                 <mat-label>Working Days in a week</mat-label>
-                                                <mat-select formControlName="calculateFor">
-                                                    <mat-option value="1">5 Days</mat-option>
-                                                    <mat-option value="2">6 Days</mat-option>
-                                                    <mat-option value="3">7 Days</mat-option>
+                                                <mat-select formControlName="weekWorkingDays">
+                                                    <mat-option value="5">5 Days</mat-option>
+                                                    <mat-option value="6">6 Days</mat-option>
+                                                    <mat-option value="7">7 Days</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-6">
                                             <mat-form-field appearance="fill">
                                                 <mat-label>Half day hours</mat-label>
-                                                <mat-select formControlName="calculateFor">
-                                                    <mat-option value="1">4 Hours</mat-option>
-                                                    <mat-option value="1">5 Hours</mat-option>
-                                                    <mat-option value="1">6 Hours</mat-option>
+                                                <mat-select formControlName="halfDayHours">
+                                                    <mat-option value="4">4 Hours</mat-option>
+                                                    <mat-option value="5">5 Hours</mat-option>
+                                                    <mat-option value="6">6 Hours</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
@@ -117,20 +126,20 @@
                                         <div class="col-md-6">
                                             <mat-form-field appearance="fill">
                                                 <mat-label>Mandatory Working Hours</mat-label>
-                                                <mat-select formControlName="calculateFor">
-                                                    <mat-option value="1">7 Hours</mat-option>
-                                                    <mat-option value="1">8 Hours</mat-option>
-                                                    <mat-option value="1">9 Hours</mat-option>
+                                                <mat-select formControlName="workingHours">
+                                                    <mat-option value="7">7 Hours</mat-option>
+                                                    <mat-option value="8">8 Hours</mat-option>
+                                                    <mat-option value="9">9 Hours</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-6">
                                             <mat-form-field appearance="fill">
                                                 <mat-label>LOP / Absent Hours</mat-label>
-                                                <mat-select formControlName="calculateFor">
-                                                    <mat-option value="1">2 Hours</mat-option>
-                                                    <mat-option value="1">3 Hours</mat-option>
-                                                    <mat-option value="1">4 Hours</mat-option>
+                                                <mat-select formControlName="lopHours">
+                                                    <mat-option value="2">2 Hours</mat-option>
+                                                    <mat-option value="3">3 Hours</mat-option>
+                                                    <mat-option value="4">4 Hours</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
@@ -141,21 +150,26 @@
                                     <div class="row clearfix" *ngFor="let shift of shiftDetails">
                                         <div class="col-md-4">
                                             <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Name">
+                                                <input [(ngModel)]="shift.name" [ngModelOptions]="{standalone: true}"
+                                                    matInput placeholder="Name">
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-4">
                                             <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Start Time">
+                                                <input [(ngModel)]="shift.startTime"
+                                                    [ngModelOptions]="{standalone: true}" matInput
+                                                    placeholder="Start Time">
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-4">
                                             <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="End Time">
+                                                <input [(ngModel)]="shift.endTime" [ngModelOptions]="{standalone: true}"
+                                                    matInput placeholder="End Time">
                                             </mat-form-field>
                                         </div>
                                     </div>
                                 </form>
+                                <button type="button" class="btn btn-primary float-right" (click)="add()">Save</button>
                             </div>
                         </div>
                     </div>

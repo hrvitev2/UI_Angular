@@ -13,6 +13,7 @@ import { DesignationsComponent } from './designations/designations.component';
 import { EmpIdComponent } from './emp-id/emp-id.component';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 
 
@@ -23,6 +24,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from '../../angular-material.module';
 import { PayslipBreakupsComponent } from './payslip-breakups/payslip-breakups.component';
+import { LeaveComponent } from './leave/leave.component';
 
 
 const routes: Routes = [
@@ -59,6 +61,10 @@ const routes: Routes = [
     component: SalaryBreakupsComponent,
   },
   {
+    path: 'payslip-breakups',
+    component: PayslipBreakupsComponent,
+  },
+  {
     path: 'statutory',
     component: StatutoryComponent,
   },
@@ -73,6 +79,10 @@ const routes: Routes = [
   {
     path: 'emp-id',
     component: EmpIdComponent,
+  },
+  {
+    path: 'holiday',
+    component: LeaveComponent,
   }
 ];
 
@@ -90,14 +100,15 @@ const routes: Routes = [
     TaManagementComponent,
     DesignationsComponent,
     EmpIdComponent,
-    PayslipBreakupsComponent
+    PayslipBreakupsComponent,
+    LeaveComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     CommonModule, MatNativeDateModule,
-    AngularMaterialModule, NgxMatFileInputModule,
+    AngularMaterialModule, NgxMatFileInputModule, MatSlideToggleModule,
     RouterModule.forChild(routes)
   ],
   entryComponents: [
@@ -110,6 +121,6 @@ const routes: Routes = [
     StatutoryComponent,
     TaManagementComponent,
     DesignationsComponent,
-    EmpIdComponent]
+    EmpIdComponent, LeaveComponent, PayslipBreakupsComponent]
 })
 export class SettingModule { }

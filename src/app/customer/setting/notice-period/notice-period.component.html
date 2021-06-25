@@ -21,31 +21,40 @@
                             <div class="link " [routerLink]="['/customer/settings']">
                                 <span class="text">Profile Settings</span>
                             </div>
-                            <div class="link active" [routerLink]="['/customer/settings/department']">
+                            <div class="link " [routerLink]="['/customer/settings/department']">
                                 <span class="text">Department</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link " [routerLink]="['/customer/settings/attendance-management']">
                                 <span class="text">Attendance Management</span>
                             </div>
                             <div class="link" [routerLink]="['/customer/settings/leave-management']">
                                 <span class="text">Leave Management</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link " [routerLink]="['/customer/settings/holiday']">
+                                <span class="text">Holidays</span>
+                            </div>
+                            <div class="link active" [routerLink]="['/customer/settings/notice-period']">
                                 <span class="text">Notice Period</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/payroll']">
                                 <span class="text">Payroll Calculation</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link " [routerLink]="['/customer/settings/payslip-breakups']">
+                                <span class="text">Payslip Breakups</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/salary-breakups']">
+                                <span class="text">Salary Breakups</span>
+                            </div>
+                            <div class="link" [routerLink]="['/customer/settings/statutory']">
                                 <span class="text">Statutory</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/ta-management']">
                                 <span class="text">TA Management</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/designation']">
                                 <span class="text">Designaton's</span>
                             </div>
-                            <div class="link" [routerLink]="['/customer/settings']">
+                            <div class="link" [routerLink]="['/customer/settings/emp-id']">
                                 <span class="text">Emp Id Management</span>
                             </div>
                         </div>
@@ -53,7 +62,7 @@
                     <div class="col-md-9">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Attendance Management</h3>
+                                <h3 class="card-title">Notice Period</h3>
                                 <div class="card-options">
                                     <form>
                                         <div class="input-group">
@@ -72,71 +81,162 @@
                             <div class="card-body">
                                 <form class="example-form" [formGroup]="forms">
                                     <div class="row clearfix">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <mat-form-field appearance="fill">
-                                                <mat-label>Auto Logout As Shift Timing</mat-label>
-                                                <mat-select formControlName="calculateFor">
-                                                    <mat-option value="1">Yes</mat-option>
-                                                    <mat-option value="2">No</mat-option>
+                                                <mat-label>Notice Period to be Served</mat-label>
+                                                <mat-select formControlName="np">
+                                                    <mat-option value="1">1 Week</mat-option>
+                                                    <mat-option value="2">2 Week</mat-option>
+                                                    <mat-option value="3">3 Week</mat-option>
+                                                    <mat-option value="4">1 Month</mat-option>
+                                                    <mat-option value="5">45 Days</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <mat-form-field appearance="fill">
-                                                <mat-label>Auto Leave - Absent not Applied</mat-label>
-                                                <mat-select formControlName="calculateFor">
-                                                    <mat-option value="1">Yes</mat-option>
-                                                    <mat-option value="2">No</mat-option>
+                                                <mat-label>Adjusting leaves to notice period</mat-label>
+                                                <mat-select formControlName="adjustLeavetoNp">
+                                                    <mat-option value="1">Not Applicable</mat-option>
+                                                    <mat-option value="2">All Leaves</mat-option>
+                                                    <mat-option value="3">1/4 of leaves</mat-option>
+                                                    <mat-option value="4">1/2 of leaves</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
-                                    </div>
-                                    <div class="row clearfix">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             <mat-form-field appearance="fill">
-                                                <mat-label>Working Days in a week</mat-label>
-                                                <mat-select formControlName="calculateFor">
-                                                    <mat-option value="1">5 Days</mat-option>
-                                                    <mat-option value="2">6 Days</mat-option>
-                                                    <mat-option value="3">7 Days</mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <mat-form-field appearance="fill">
-                                                <mat-label>Half day hours</mat-label>
-                                                <mat-select formControlName="calculateFor">
-                                                    <mat-option value="1">4 Hours</mat-option>
-                                                    <mat-option value="1">5 Hours</mat-option>
-                                                    <mat-option value="1">6 Hours</mat-option>
+                                                <mat-label>Type of Adjusting to NP</mat-label>
+                                                <mat-select formControlName="adjustLeaveType">
+                                                    <mat-option value="1">All leaves</mat-option>
+                                                    <mat-option value="2">Sick Leave</mat-option>
+                                                    <mat-option value="3">Casual Leave</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
                                     </div>
                                     <div class="row clearfix">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
+                                            <mat-slide-toggle formControlName="waiveOffNp" [checked]="true"
+                                                [labelPosition]="'before'">Wave of Notice Period
+                                            </mat-slide-toggle>
+                                        </div>
+                                        <div class="col-md-4" *ngIf="forms.value.waiveOffNp">
                                             <mat-form-field appearance="fill">
-                                                <mat-label>Mandatory Working Hours</mat-label>
-                                                <mat-select formControlName="calculateFor">
-                                                    <mat-option value="1">7 Hours</mat-option>
-                                                    <mat-option value="1">8 Hours</mat-option>
-                                                    <mat-option value="1">9 Hours</mat-option>
+                                                <mat-label>Yes Notice Period can be WO</mat-label>
+                                                <mat-select formControlName="waiveOffNpDuration">
+                                                    <mat-option value="1">1 Week</mat-option>
+                                                    <mat-option value="2">2 Week</mat-option>
+                                                    <mat-option value="3">3 Week</mat-option>
+                                                    <mat-option value="4">1 Month</mat-option>
+                                                    <mat-option value="5">45 Days</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4" *ngIf="forms.value.waiveOffNp">
+                                            <mat-slide-toggle formControlName="npVariesToDesignation" [checked]="true"
+                                                [labelPosition]="'before'">Notice Period varies to Designation
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                    <br />
+
+                                    <div class="row clearfix">
+                                        <div class="col-md-4">
+                                            <mat-slide-toggle formControlName="buyOutNp" [checked]="true"
+                                                [labelPosition]="'before'">Buy out Notice Period
+                                            </mat-slide-toggle>
+                                        </div>
+                                        <div class="col-md-4" *ngIf="forms.value.buyOutNp">
                                             <mat-form-field appearance="fill">
-                                                <mat-label>LOP / Absent Hours</mat-label>
-                                                <mat-select formControlName="calculateFor">
-                                                    <mat-option value="1">2 Hours</mat-option>
-                                                    <mat-option value="1">3 Hours</mat-option>
-                                                    <mat-option value="1">4 Hours</mat-option>
+                                                <mat-label>Yes Buy out notice period for</mat-label>
+                                                <mat-select formControlName="buyOutNpDuration">
+                                                    <mat-option value="1">1 Week</mat-option>
+                                                    <mat-option value="2">2 Week</mat-option>
+                                                    <mat-option value="3">3 Week</mat-option>
+                                                    <mat-option value="4">1 Month</mat-option>
+                                                    <mat-option value="5">45 Days</mat-option>
                                                 </mat-select>
                                             </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4" *ngIf="forms.value.buyOutNp">
+                                            <mat-slide-toggle formControlName="npApplicableIfTerminated"
+                                                [checked]="true" [labelPosition]="'before'">If Terminated Notice Period
+                                                applicable
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                    <br />
+
+
+                                    <h3 class="card-title">Notice Period for Probationary Emplyoee</h3>
+
+                                    <div class="row clearfix">
+                                        <div class="col-md-4">
+                                            <mat-slide-toggle formControlName="npApplicableForProbation"
+                                                [checked]="true" [labelPosition]="'before'">Notice Period applicable for
+                                                Proationary
+
+                                            </mat-slide-toggle>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Yes Notice Period to be served</mat-label>
+                                                <mat-select formControlName="npDurationDuringProbation">
+                                                    <mat-option value="1">1 Week</mat-option>
+                                                    <mat-option value="2">2 Week</mat-option>
+                                                    <mat-option value="3">3 Week</mat-option>
+                                                    <mat-option value="4">1 Month</mat-option>
+                                                    <mat-option value="5">45 Days</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-slide-toggle formControlName="buyOutNpProbation" [checked]="true"
+                                                [labelPosition]="'before'">Buy out Notice Period
+                                            </mat-slide-toggle>
                                         </div>
                                     </div>
 
+                                    <div class="row clearfix">
+                                        <div class="col-md-4">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Adjusting Leaves to Notice Period</mat-label>
+                                                <mat-select formControlName="adjustLeavetoNpProbation">
+                                                    <mat-option value="1">1 Week</mat-option>
+                                                    <mat-option value="2">2 Week</mat-option>
+                                                    <mat-option value="3">3 Week</mat-option>
+                                                    <mat-option value="4">1 Month</mat-option>
+                                                    <mat-option value="5">45 Days</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Type of Leaves Adjusted to NP</mat-label>
+                                                <mat-select formControlName="adjustLeaveTypeProbation">
+                                                    <mat-option value="1">All Leaves</mat-option>
+                                                    <mat-option value="2">Casual Leave</mat-option>
+                                                    <mat-option value="3">Sick Leaves</mat-option>
+                                                    <mat-option value="4">CO</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Yes Buy out Notice Period for</mat-label>
+                                                <mat-select formControlName="buyOutNpProbationFor">
+                                                    <mat-option value="1">1 Week</mat-option>
+                                                    <mat-option value="2">2 Week</mat-option>
+                                                    <mat-option value="3">3 Week</mat-option>
+                                                    <mat-option value="4">1 Month</mat-option>
+                                                    <mat-option value="5">45 Days</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
                                 </form>
+                                <button type="button" class="btn btn-primary float-right" (click)="add()">Save</button>
                             </div>
                         </div>
                     </div>
