@@ -55,3 +55,8 @@
     transform:translateY(0%) translateZ(0) scale(1.1);
     font-weight:600;
 }
+
+
+.sep-bottom {
+    border-bottom: 1px solid #eee;
+}

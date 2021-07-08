@@ -17,7 +17,7 @@
 </div>
 
 <div class="user_div">
-    <h5 class="brand-name mb-4">HR VITE
+    <h5 class="brand-name mb-4">HRVITE
         <a href="javascript:void(0)" (click)="toggleUserMenu()" class="user_btn">
             <i class="icon-logout"></i>
         </a>
@@ -37,7 +37,7 @@
 </div>
 
 <div id="left-sidebar" class="sidebar ">
-    <h5 class="brand-name">HR VITE
+    <h5 class="brand-name">HRVITE
         <!-- <a href="javascript:void(0)" class="menu_option float-right"><i
                     class="icon-grid font-16" data-toggle="tooltip" data-placement="left"
                     title="Grid & List Toggle"></i></a> -->
@@ -45,8 +45,7 @@
     <nav id="left-sidebar-nav" class="sidebar-nav">
         <ul class="metismenu">
             <li class="g_heading">Directories</li>
-            <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
-                *ngIf="userType == 1">
+            <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="userType == 1">
                 <a href="javascript:void(0)" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
                     aria-controls="collapseBasic" class="has-arrow arrow-c">
                     <i class="icon-rocket"></i>
@@ -126,12 +125,90 @@
                 </ul>
             </li>
 
-            <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}"
-                *ngIf="userType == 2">
-                <a href="javascript:void(0)" [routerLink]="['/customer/settings']"  class="has-arrow arrow-c">
+            <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="userType == 2">
+                <a href="javascript:void(0)" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
+                    aria-controls="collapseBasic" class="has-arrow arrow-c">
                     <i class="icon-rocket"></i>
                     <span>Settings</span>
                 </a>
+                <ul class="collapse" id="collapseBasic" [collapse]="isCollapsed" [isAnimated]="true">
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/customer/settings']" href="javascript:void(0)">
+                            <span>Profile Settings</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/customer/settings/department']" href="javascript:void(0)">
+                            <span>Department</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/customer/settings/attendance-management']"
+                            href="javascript:void(0)">
+                            <span>Attendance Management</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/customer/settings/leave-management']"
+                            href="javascript:void(0)">
+                            <span>Leave Management</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/customer/settings/holiday']" href="javascript:void(0)">
+                            <span>Holidays</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/customer/settings/notice-period']"
+                            href="javascript:void(0)">
+                            <span>Notice Period</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/customer/settings/payroll']" href="javascript:void(0)">
+                            <span>Payroll Calculation</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/customer/settings/payslip-breakups']"
+                            href="javascript:void(0)">
+                            <span>Payslip Breakups</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/customer/settings/salary-breakups']"
+                            href="javascript:void(0)">
+                            <span>Salary Breakups</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/customer/settings/statutory']" href="javascript:void(0)">
+                            <span>Statutory</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/customer/settings/ta-management']"
+                            href="javascript:void(0)">
+                            <span>TA Management</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/customer/settings/designation']" href="javascript:void(0)">
+                            <span>Designation's</span>
+                        </a>
+                    </li>
+                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                        <a class="submenu" [routerLink]="['/customer/settings/emp-id']" href="javascript:void(0)">
+                            <span>Emp Id Management</span>
+                        </a>
+                    </li>
+                    <!-- <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                    <a class="submenu" [routerLink]="['/master/email-template']" href="javascript:void(0)">
+                        <span>Email Template</span>
+                    </a>
+                </li> -->
+                </ul>
             </li>
 
         </ul>

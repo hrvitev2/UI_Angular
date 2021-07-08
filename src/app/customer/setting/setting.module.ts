@@ -10,22 +10,22 @@ import { SalaryBreakupsComponent } from './salary-breakups/salary-breakups.compo
 import { StatutoryComponent } from './statutory/statutory.component';
 import { TaManagementComponent } from './ta-management/ta-management.component';
 import { DesignationsComponent } from './designations/designations.component';
+import { PayslipBreakupsComponent } from './payslip-breakups/payslip-breakups.component';
+import { LeaveComponent } from './leave/leave.component';
+
 import { EmpIdComponent } from './emp-id/emp-id.component';
-import { NgxMatFileInputModule } from '@angular-material-components/file-input';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 
 
-
-//FORMS
+//Modules
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from "@angular/router";
 import { ReactiveFormsModule } from '@angular/forms';
 import { AngularMaterialModule } from '../../angular-material.module';
-import { PayslipBreakupsComponent } from './payslip-breakups/payslip-breakups.component';
-import { LeaveComponent } from './leave/leave.component';
-
+import { NgxMatFileInputModule } from '@angular-material-components/file-input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 const routes: Routes = [
   {
@@ -106,7 +106,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule, NgxMaterialTimepickerModule,
     CommonModule, MatNativeDateModule,
     AngularMaterialModule, NgxMatFileInputModule, MatSlideToggleModule,
     RouterModule.forChild(routes)

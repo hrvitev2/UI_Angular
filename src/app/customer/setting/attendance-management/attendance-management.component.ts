@@ -66,7 +66,8 @@ export class AttendanceManagementComponent implements OnInit {
         this.forms.controls.halfDayHours.setValue(this.lists.halfDayHours);
         this.forms.controls.lopHours.setValue(this.lists.lopHours);
         this.shiftDetails = this.lists.shiftTimings;
-        console.log(this.lists)
+        console.log(this.lists);
+
       },
       (error: any) => {
         this.toastr.error(error.msg);
@@ -80,13 +81,22 @@ export class AttendanceManagementComponent implements OnInit {
       "endTime": ""
     });
   }
+
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   add() {
 
-  //  this.forms.controls.status.setValue("a");
+    //  this.forms.controls.status.setValue("a");
 
     if (this.forms.invalid) {
       this.toastr.error("Please Fill the Mandatory Details");
       return false;
+    }
+
+    for (let i = 0; i < this.shiftDetails.length; i++) {
+      this.shiftDetails[i].name = this.capitalizeFirstLetter(this.shiftDetails[i].name);
     }
 
     this.forms.controls.shiftDetails.setValue(this.shiftDetails);

@@ -120,6 +120,8 @@ export class DepartmentComponent implements OnInit {
       return false;
     }
 
+    this.deptForm.controls.name.setValue(this.capitalizeFirstLetter(this.deptForm.value.name));
+
     this.http.addDataCustomer('department', this.deptForm.value).subscribe(
       (data: any) => {
         this.toastr.success("Added Successfully!");
@@ -130,6 +132,11 @@ export class DepartmentComponent implements OnInit {
         this.toastr.error(error.msg);
       });
   }
+
+  capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
 
   edit(data) {
     this.editId = data.id;

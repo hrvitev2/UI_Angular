@@ -31,3 +31,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .inline .mat-slide-toggle-label {
   margin-top: 18px !important;
 }
+
+.table-responsive th {
+
+  text-transform: capitalize !important;
+  font-weight: bold !important;
+}

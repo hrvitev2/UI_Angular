@@ -62,6 +62,7 @@ export class ProfileComponent implements OnInit {
         this.asignValue(value);
       }
     });
+
   }
   asignValue(value) {
     this.custForm.controls.orgName.setValue(value.userBusinessInfo.orgName);

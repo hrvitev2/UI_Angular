@@ -14,6 +14,10 @@ const routes: Routes = [
     path: "settings",
     loadChildren: () => import('./setting/setting.module').then(m => m.SettingModule)
   },
+  {
+    path: "clients",
+    loadChildren: () => import('./clients/clients.module').then(m => m.ClientsModule)
+  },
 ]
 @NgModule({
   declarations: [],
