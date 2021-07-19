@@ -53,13 +53,13 @@ export class HeaderComponent implements OnInit {
 
   getDetails() {
 
-    this.http.getMyProfile().subscribe(
-      (data: any) => {
-        this.dataSharingService.userDetails.next(data.data);
-      },
-      (error: any) => {
-        //    this.toastr.error(error.msg);
-      });
+    // this.http.getMyProfile().subscribe(
+    //   (data: any) => {
+    //     this.dataSharingService.userDetails.next(data.data);
+    //   },
+    //   (error: any) => {
+    //     //    this.toastr.error(error.msg);
+    //   });
   }
 
 
