@@ -111,11 +111,21 @@ export class ViewComponent implements OnInit {
   getClient()
   {
     this.id = this.activatedRoute.snapshot.params['id'];
-    alert(this.id);
+    // alert(this.id);
 
     this.http.getDetails('client', this.id).subscribe(
       (data: any) => {
         console.log(data.data);
+        var finalData = data.data;
+        this.clientName = finalData.clientName;
+        this.status = finalData.status;
+        this.serviceModel = finalData.serviceModel;
+        this.socialProfile = finalData.socialProfiles;
+        this.location = finalData.locations;
+        finalData.locations.forEach(locationElement => {
+              this.contact = locationElement.contactInfos;
+              // console.log(locationElement.contactInfos);
+        });
       },
       (error: any) => {
         this.toastr.error(error.msg);
