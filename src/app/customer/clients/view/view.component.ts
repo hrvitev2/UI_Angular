@@ -110,7 +110,7 @@ export class ViewComponent implements OnInit {
 
   getClient()
   {
-    this.id = this.activatedRoute.snapshot.params['id'];
+    this.id = this.activatedRoute.snapshot.params['id']; 
     // alert(this.id);
 
     this.http.getDetails('client', this.id).subscribe(
