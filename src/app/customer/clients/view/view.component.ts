@@ -16,8 +16,7 @@ export class ViewComponent implements OnInit {
   custForm: FormGroup;
   clientName:any;
   status:any;
-
-  
+  minDate = new Date();
   location: any = [{
     "name": "",
     "area": "",

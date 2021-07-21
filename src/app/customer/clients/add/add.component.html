@@ -174,14 +174,14 @@
                                         <div class="col-md-4">
                                             <mat-form-field appearance="fill">
                                                 <mat-label>Call Back </mat-label>
-                                                <input matInput [ngModelOptions]="{standalone: true}"  [matDatepicker]="picker2" [(ngModel)]="contact.callbackDate">
+                                                <input [min]="minDate"  matInput [ngModelOptions]="{standalone: true}"  [matDatepicker]="picker2" [(ngModel)]="contact.callbackDate">
                                                 <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                                                 <mat-datepicker #picker2></mat-datepicker>
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-4">
                                             <mat-form-field class="example-full-width">
-                                                <input [ngxTimepicker]="picker" [format]="24" matInput
+                                                <input [ngxTimepicker]="picker"  aria-label="12hr format"  matInput
                                                 [(ngModel)]="contact.callbackTime" [ngModelOptions]="{standalone: true}"
                                                     placeholder="Time">
                                                 <ngx-material-timepicker #picker>

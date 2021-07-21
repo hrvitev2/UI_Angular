@@ -203,11 +203,11 @@
                             <span>Emp Id Management</span>
                         </a>
                     </li>
-                    <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+                    <!-- <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
                         <a class="submenu" [routerLink]="['/customer/clients/list']" href="javascript:void(0)">
                             <span>Clients</span>
                         </a>
-                    </li>
+                    </li> -->
                     <!-- <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
                     <a class="submenu" [routerLink]="['/master/email-template']" href="javascript:void(0)">
                         <span>Email Template</span>
@@ -216,11 +216,13 @@
                 </ul>
             </li>
 
-            <!-- <li [routerLinkActive]="['acive']" [routerLinkActiveOptions]="{exact:true}" *ngIf="userType == 2">
-                <a href="javascript:void(0)"  [routerLink]="['/customer/clients/list']">
+            <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="userType == 2">
+                <a [routerLinkActive]="['active']"  [routerLink]="['/customer/clients/list']" 
+                   class="has-arrow arrow-c">
+                    <i class="icon-briefcase"></i>
+                    <span>Clients</span>
                 </a>
-              
-            </li> -->
+           </li>
 
         </ul>
     </nav>
