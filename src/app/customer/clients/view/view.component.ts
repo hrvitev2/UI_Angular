@@ -30,10 +30,10 @@ export class ViewComponent implements OnInit {
   }];
   id:any;
   contact: any = [{
-    "fName": "",
+    "fname": "",
     "lName": "",
     "designation": "",
-    "number": "",
+    "mobile": "",
     "email": "",
     "directLine":"",
     "ext":"",
@@ -82,8 +82,8 @@ export class ViewComponent implements OnInit {
       'socialProfile': new FormControl(""),
        'serviceModel': new FormControl("", Validators.required),
         'status': new FormControl(""),
-      //  "callbackDate": new FormControl(""),
-      //  "callbackTime": new FormControl(""),
+        'clientId': new FormControl(""),
+        //  "callbackTime": new FormControl(""),
        "contact": new FormControl("")
     });
   
@@ -184,13 +184,13 @@ export class ViewComponent implements OnInit {
           this.toastr.error("Contact Email is Not Valid!");
           return false;
         }
-        if (this.contact[i].number.length != 10) {
+        if (this.contact[i].mobile.length != 10) {
           this.toastr.error("Contact Mobile Number is Not Valid!");
           return false;
         }
       }
     
-    this.addCustomer()
+    this.Update()
   }
 
   convertBoolean(val) {
@@ -240,6 +240,32 @@ export class ViewComponent implements OnInit {
   validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
+  }
+  Update()
+  {
+    if (this.custForm.invalid) {
+      this.toastr.error("Please Fill the Mandatory Details");
+      return false;
+    }
+    else
+    {
+      this.custForm.controls.clientId.setValue(this.activatedRoute.snapshot.params['id']);
+
+      console.log(this.custForm.value);
+      this.http.statusChange(this.custForm.value).subscribe(
+        (data: any) => {
+          if (data.msg == "Client Updated Successfully!") {
+            // alert(data.msg);
+          } else {
+            this.toastr.success("Client Updated Successfully!");
+          }
+           this.router.navigate(['/customer/clients/list']);
+  
+        },
+        (error: any) => {
+          this.toastr.error(error.msg);
+        });
+    }
   }
 
 }
