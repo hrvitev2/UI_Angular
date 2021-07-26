@@ -80,6 +80,8 @@ export class HttpService {
         endPoint = "admin/customer/list"; break;
         case 'client':
           endPoint = "customer/client/list"; break;
+          case 'project':
+            endPoint = "customer/project/list"; break;
     }
     let headers = new HttpHeaders()
       .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token).set("offset", ps.toString()).set("limit", '5');

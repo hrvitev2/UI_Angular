@@ -223,6 +223,13 @@
                     <span>Clients</span>
                 </a>
            </li>
+           <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}" *ngIf="userType == 2">
+            <a [routerLinkActive]="['active']"  [routerLink]="['/customer/projects/list']" 
+               class="has-arrow arrow-c">
+                <i class="icon-briefcase"></i>
+                <span>Projects</span>
+            </a>
+       </li>
 
         </ul>
     </nav>
