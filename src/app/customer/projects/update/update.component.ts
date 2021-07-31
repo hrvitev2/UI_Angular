@@ -26,6 +26,8 @@ export class UpdateComponent implements OnInit {
   minDate = new Date();
   clientList:any;
   minDateFrom = new Date();
+  dummy_array:any = [];
+
   docs: any;
     team: any = [
     {
@@ -69,7 +71,7 @@ export class UpdateComponent implements OnInit {
   constructor(private http: HttpService, private router: Router, private activatedRoute: ActivatedRoute, private toastr: ToastrService) {
     this.custForm = new FormGroup({
       'clientId' : new FormControl("", Validators.required),
-       'team': new FormControl(""),
+       'projectId': new FormControl(""),
         'status': new FormControl(""),
      'projectName': new FormControl("", Validators.required),
      'from': new FormControl("", Validators.required),
@@ -80,7 +82,7 @@ export class UpdateComponent implements OnInit {
      'ratePaidBase': new FormControl("", Validators.required),
      'skills': new FormControl("", Validators.required),
      'priority': new FormControl("", Validators.required),
-       "docs": new FormControl(),
+      //  "docs": new FormControl(),
        "interviewPanelLevel": new FormControl(""),
        "desc": new FormControl("", Validators.required)
     });
@@ -94,7 +96,6 @@ export class UpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params['id'];
-
     this.getClientList();
     this.getProject();
   }
@@ -113,7 +114,7 @@ export class UpdateComponent implements OnInit {
     this.http.getDetails('project', this.id).subscribe(
       (data: any) => {
         var list = data.data;
-      
+        this.clientId = list.clientId.toString();
         this.team = list.projectTeams;
         this.desc = list.desc;
         this.interviewPanelLevel = list.interviewPanelLevel;
@@ -199,37 +200,33 @@ export class UpdateComponent implements OnInit {
 
 
   add() {
-    this.docs = [
-      {
-          "name": "test.doc"
-      },
-      {
-          "name": "test.pdf"
-      }
-  ],
-    this.custForm.controls.docs.setValue(this.docs);
-    this.custForm.controls.team.setValue(this.team);
+  
+    // this.custForm.controls.team.setValue(this.team);
 
     if (this.custForm.invalid) {
       this.toastr.error("Please Fill the Mandatory Details");
       return false;
     }
-    this.addCustomer()
+    this.file = this.custForm.value.docs;
+    // this.custForm.controls.docs.setValue(this.file.name)
+     this.addCustomer();
+    
   }
 
   upload() {
-   
-    // die();
-    // this.http.upload(formData).subscribe(
-      // (data: any) => {
-      //   console.log(data)
-      //   this.addCustomer(data)
-      //   //  this.router.navigate(['/customer']);
+    const formData: FormData = new FormData();
+    formData.append('type', 'document');
+    formData.append('file', this.file);
 
-      // },
-      // (error: any) => {
-      //   this.toastr.error(error.msg);
-      // });
+    this.http.upload(formData).subscribe(
+      (data: any) => {
+        // console.log(data)
+        // this.addCustomer(data)
+
+      },
+      (error: any) => {
+        this.toastr.error(error.msg);
+      });
 
   }
 
@@ -242,20 +239,22 @@ export class UpdateComponent implements OnInit {
   }
 
   addCustomer() {
-    console.log(this.custForm.value);
 
+
+    // this.dummy_array.push(
+    //   {
+    //     "name": data.fileInfo.newFile,
+    //   });
+
+    // this.custForm.controls.docs.setValue(this.dummy_array);
+    this.custForm.controls.projectId.setValue(this.id);
     let body = this.custForm.value;
-
-    
     body.rate = body.rate.toString();
-
-
-    this.http.add('project', this.custForm.value).subscribe(
+    this.http.update('project', this.custForm.value).subscribe(
       (data: any) => {
         if (data.msg == "Project Already Registered!") {
-          alert(data.msg);
         } else {
-          this.toastr.success("Added Successfully!");
+          this.toastr.success(data.msg);
         }
          this.router.navigate(['/customer/projects/list']);
 

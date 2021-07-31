@@ -28,7 +28,7 @@
                                     <mat-form-field appearance="fill">
                                         <mat-label>Select Client</mat-label>
                                         <mat-select formControlName="clientId" [(ngModel)]="this.clientId">
-                                            <mat-option value="{{client.id}}" *ngFor="let client of clientList">{{client.clientName}}</mat-option>
+                                            <mat-option value="{{client.id}}"  *ngFor="let client of clientList">{{client.clientName}}</mat-option>
                                            
                                         </mat-select>
                                     </mat-form-field>
@@ -177,11 +177,11 @@
                                             </mat-select>
                                         </mat-form-field>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label for="singleFile">Upload file</label>
-                                        <mat-form-field class="example-full-width">
-                                            <input matInput [(ngModel)]="this.docs"
-                                            [ngModelOptions]="{standalone: true}" placeholder="Upload">
+                                    <div class="col-md-4">
+                                        <mat-form-field>
+                                            <ngx-mat-file-input placeholder="Upload Documents" >
+                                                <mat-icon ngxMatFileInputIcon><i class="fa fa-paperclip"></i></mat-icon>
+                                            </ngx-mat-file-input>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-6">
@@ -196,7 +196,7 @@
                                     </div>
                                 </div>
                         </form>
-                        <button type="button" class="btn btn-primary float-right" (click)="add()">Save</button>
+                        <button type="button" class="btn btn-primary float-right" (click)="add()">Update</button>
                         <button type="button" class="btn btn-primary" [routerLink]="['/customer/client/list']">
                             <i class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> Back</button>
                    

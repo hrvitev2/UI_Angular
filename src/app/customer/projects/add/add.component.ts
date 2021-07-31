@@ -126,9 +126,6 @@ export class AddComponent implements OnInit {
     this.file = this.custForm.value.docs;
     // this.custForm.controls.docs.setValue(this.file.name)
     this.upload();
-
-    
-    // this.addCustomer()
   }
 
   upload() {
@@ -138,7 +135,7 @@ export class AddComponent implements OnInit {
 
     this.http.upload(formData).subscribe(
       (data: any) => {
-        console.log(data)
+        // console.log(data)
         this.addCustomer(data)
 
       },
