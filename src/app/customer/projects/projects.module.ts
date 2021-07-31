@@ -13,6 +13,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { AddComponent } from './add/add.component';
 import { ListComponent } from './list/list.component';
+import { UpdateComponent } from './update/update.component';
 
 const routes: Routes = [
   {
@@ -22,12 +23,17 @@ const routes: Routes = [
   {
     path: 'add',
     component: AddComponent,
+  },
+  {
+    path: 'update/:id',
+    component: UpdateComponent,
   }
 ];
 @NgModule({
   declarations: [
     AddComponent,
-    ListComponent
+    ListComponent,
+    UpdateComponent
   ],
   imports: [
     CommonModule,

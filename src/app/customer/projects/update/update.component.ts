@@ -3,14 +3,13 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HttpService } from '../../../http.service';
 import { Router, ActivatedRoute } from "@angular/router";
-import { MatFileUploadModule } from 'angular-material-fileupload';
 
 @Component({
-  selector: 'app-add',
-  templateUrl: './add.component.html',
-  styleUrls: ['./add.component.css']
+  selector: 'app-update',
+  templateUrl: './update.component.html',
+  styleUrls: ['./update.component.css']
 })
-export class AddComponent implements OnInit {
+export class UpdateComponent implements OnInit {
   @ViewChild('target1') private myScrollContainer: ElementRef;
   custForm: FormGroup;
   projectName:any;
@@ -26,8 +25,8 @@ export class AddComponent implements OnInit {
   desc:any;
   minDate = new Date();
   clientList:any;
-  dummy_array:any = [];
   minDateFrom = new Date();
+  docs: any;
     team: any = [
     {
       "empId": "",
@@ -37,7 +36,11 @@ export class AddComponent implements OnInit {
  
   interviewPanelLevel:any;
   file: any;
-
+  id:any;
+  deleteEmp = [{
+    "projectId":"",
+      "teamRowId" : ""
+  }];
   statusArray = [{
     "key":"l","value" : "Lead Generated"
     },
@@ -55,7 +58,6 @@ export class AddComponent implements OnInit {
     },
   ];
   clientId:any;
-  
   constructor(private http: HttpService, private router: Router, private activatedRoute: ActivatedRoute, private toastr: ToastrService) {
     this.custForm = new FormGroup({
       'clientId' : new FormControl("", Validators.required),
@@ -83,15 +85,72 @@ export class AddComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.id = this.activatedRoute.snapshot.params['id'];
+
     this.getClientList();
+    this.getProject();
   }
 
   addTeam() {
     this.team.push({
+      "id":"",
       "empId": "",
       "role": ""
     });
     this.scrollToElement('location-list');
+  }
+
+  getProject()
+  {
+    this.http.getDetails('project', this.id).subscribe(
+      (data: any) => {
+        var list = data.data;
+      
+        this.team = list.projectTeams;
+        this.desc = list.desc;
+        this.interviewPanelLevel = list.interviewPanelLevel;
+        this.platform = list.platform;
+        this.priority = list.priority;
+        this.projectName = list.projectName;
+        this.rate = list.rate;
+        this.rateCurrency = list.rateCurrency;
+        this.ratePaidBase = list.ratePaidBase;
+        this.skills = list.skills;
+        this.status = list.status;
+        this.from = list.from;
+        this.to = list.to;
+
+
+
+        // this.custForm = list;
+        // console.log(list);
+
+      },
+      (error: any) => {
+        this.toastr.error(error.msg);
+      });
+  }
+  deleteEmployee(Rowid)
+  {
+
+    this.deleteEmp[0].projectId = this.id;
+    this.deleteEmp[0].teamRowId = Rowid;
+
+    
+
+    this.http.deleteEmployee('this.deleteEmp').subscribe(
+      (data: any) => {
+        this.toastr.success(data.msg);
+          window.location.reload();
+
+      },
+      (error: any) => {
+        this.toastr.error(error.msg);
+      });
+  }
+  AddEmployee(id,role)
+  {
+
   }
   scrollToElement(el): void {
     this.myScrollContainer.nativeElement.scroll({
@@ -116,35 +175,37 @@ export class AddComponent implements OnInit {
 
 
   add() {
-  
+    this.docs = [
+      {
+          "name": "test.doc"
+      },
+      {
+          "name": "test.pdf"
+      }
+  ],
+    this.custForm.controls.docs.setValue(this.docs);
     this.custForm.controls.team.setValue(this.team);
 
     if (this.custForm.invalid) {
       this.toastr.error("Please Fill the Mandatory Details");
       return false;
     }
-    this.file = this.custForm.value.docs;
-    // this.custForm.controls.docs.setValue(this.file.name)
-    this.upload();
-
-    
-    // this.addCustomer()
+    this.addCustomer()
   }
 
   upload() {
-    const formData: FormData = new FormData();
-    formData.append('type', 'document');
-    formData.append('file', this.file);
+   
+    // die();
+    // this.http.upload(formData).subscribe(
+      // (data: any) => {
+      //   console.log(data)
+      //   this.addCustomer(data)
+      //   //  this.router.navigate(['/customer']);
 
-    this.http.upload(formData).subscribe(
-      (data: any) => {
-        console.log(data)
-        this.addCustomer(data)
-
-      },
-      (error: any) => {
-        this.toastr.error(error.msg);
-      });
+      // },
+      // (error: any) => {
+      //   this.toastr.error(error.msg);
+      // });
 
   }
 
@@ -156,17 +217,14 @@ export class AddComponent implements OnInit {
     }
   }
 
-  addCustomer(data) {
+  addCustomer() {
+    console.log(this.custForm.value);
 
-
-    this.dummy_array.push(
-      {
-        "name": data.fileInfo.newFile,
-      });
-
-    this.custForm.controls.docs.setValue(this.dummy_array);
     let body = this.custForm.value;
+
+    
     body.rate = body.rate.toString();
+
 
     this.http.add('project', this.custForm.value).subscribe(
       (data: any) => {
@@ -196,4 +254,3 @@ export class AddComponent implements OnInit {
   }
 
 }
-

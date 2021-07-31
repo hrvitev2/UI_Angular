@@ -65,7 +65,7 @@
                                             <tr>
                                                 <th>S.NO</th>
                                                 <th>Project Name</th>
-                                                <th>Service Model</th>
+                                                <th>Priority</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -82,12 +82,10 @@
                                                 <td>
                                                  
 
-                                                        <span *ngIf="data.serviceModel == 1">Full Time Staffing</span>
-                                                    <span *ngIf="data.serviceModel == 2">Contract Staffing</span>
-                                                    <span *ngIf="data.serviceModel == 3">Direct Contract</span>
-                                                    <span *ngIf="data.serviceModel == 4">R P O</span>
-                                                    <span *ngIf="data.serviceModel == 5">Development</span>
-
+                                                        <span *ngIf="data.priority == 'L'">Low</span>
+                                                        <span *ngIf="data.priority == 'H'">High</span>
+                                                        <span *ngIf="data.priority == 'M'">Medium</span>
+                                                   
                                                 </td>
                                                 
                                                 <td>
@@ -102,17 +100,18 @@
                                                 </td>
                                                 <td>
                                                     <button type="button"  (click)="edit(data.id)" class="btn btn-icon"
-                                                        title="View">
+                                                        title="Update">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                  
+                                                    <button type="button" class="btn" 
+                                                        (click)="changeStatus(data.id)" title="view" class="btn btn-icon">
                                                         <i class="fa fa-eye"></i>
                                                     </button>
                                                     <button type="button" class="btn btn-icon js-sweetalert"
-                                                        (click)="delete(data)" title="Delete" data-type="confirm">
-                                                        <i class="fa fa-trash-o text-danger"></i>
-                                                    </button>
-                                                    <button type="button" class="btn" 
-                                                        (click)="changeStatus(data.id)" title="Change status" data-type="confirm">
-                                                        Change Status
-                                                    </button>
+                                                    (click)="delete(data.id)" title="Delete" data-type="confirm">
+                                                    <i class="fa fa-trash-o text-danger"></i>
+                                                </button>
                                                 </td>
                                             </tr>
                                         </tbody>

@@ -93,6 +93,14 @@ export class HttpService {
     }
     return this.httpClient.get(this.APIURL + endPoint, { headers })
   }
+  getClientList()
+  {
+    let endPoint;
+    endPoint = "customer/client/list";
+    let headers = new HttpHeaders()
+      .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
+    return this.httpClient.get(this.APIURL + endPoint, { headers })
+  }
 
   add(type, body) {
     let endPoint;
@@ -125,6 +133,8 @@ export class HttpService {
         endPoint = "admin/customer/add"; break;
         case 'client':
           endPoint = "customer/client/add"; break;
+          case 'project':
+            endPoint = "customer/project/add"; break;
     }
     let headers = new HttpHeaders()
       .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
@@ -160,6 +170,8 @@ export class HttpService {
         endPoint = "admin/emailTemplate/update"; break;
       case 'customer':
         endPoint = "admin/customer/update"; break;
+        case 'project':
+          endPoint = "admin/project/update"; break;
     }
     let headers = new HttpHeaders()
       .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
@@ -181,10 +193,12 @@ export class HttpService {
         endPoint = "admin/customer/view"; types = "uid"; break;
         case 'client':
           endPoint = "customer/client/view"; types = "id"; break;
+          case 'project':
+            endPoint = "customer/project/view"; types = "id"; break;
 
     }
     let headers = new HttpHeaders()
-      .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token).set(types, id.toString());
+      .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token).set(types, id.toString()).set("status", "a");
     return this.httpClient.get(this.APIURL + endPoint, { headers })
   }
 
@@ -192,6 +206,13 @@ export class HttpService {
     let headers = new HttpHeaders()
       .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
     return this.httpClient.post(this.APIURL + 'customer/client/statusChange', body, { headers })
+  }
+  deleteEmployee(body)
+  {
+    let endPoint = "customer/project/removeTeam";
+    let headers = new HttpHeaders()
+    .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
+  return this.httpClient.post(this.APIURL + endPoint, body, { headers })
   }
 
   upload(fd) {
@@ -252,6 +273,17 @@ export class HttpService {
         .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token).set(key, value);
     }
     return this.httpClient.get(this.APIURL + 'customer/client/list', { headers })
+  }
+
+  getProjectFilter(key, value) {
+    let headers = new HttpHeaders()
+      .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
+
+    if (key) {
+      headers = new HttpHeaders()
+        .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token).set(key, value);
+    }
+    return this.httpClient.get(this.APIURL + 'customer/project/list', { headers })
   }
 
   customerGet(type) {

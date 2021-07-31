@@ -35,6 +35,12 @@ export class ListComponent implements OnInit {
   pager: any = {};
   // paged items
   pagedItems: any[];
+  UpdateValues: any = [
+    {
+      "projectId": "",
+      "status": "i"
+    }
+  ];
   firstPageData: any;
   serviceModelArray = ["Full Time Staffing","Contract Staffing","Direct Contract","R P O","Development"];
 
@@ -109,17 +115,16 @@ export class ListComponent implements OnInit {
   }
 
   redirect(e) {
-    this.router.navigate(['/customer/client/add', e.value]);
+    this.router.navigate(['/customer/project/add', e.value]);
   }
 
   filter(type, e) {
-    this.http.getClientFilter(type, e.value).subscribe(
+    this.http.getProjectFilter(type, e.value).subscribe(
       (data: any) => {
         this.projectList = data.data;
         if(this.projectList.count > 0)
         {
           this.projectList.rows.forEach(element => {
-            // element.serviceModel = this.getServiceModel(element.serviceModel);
           });
         }
         console.log(this.projectList);
@@ -151,7 +156,7 @@ export class ListComponent implements OnInit {
     this.router.navigate(['/customer/projects/add/']);
   }
   edit(id) {
-    this.router.navigate(['/customer/clients/view',id]);
+    this.router.navigate(['/customer/projects/update/',id]);
     // this.router.navigate(['/customer/clients/update/'+id]);
   }
   assigndata(page) {
@@ -179,9 +184,20 @@ export class ListComponent implements OnInit {
 
 
 
-  delete(data) {
+  delete(id) {
     if (confirm("Are you sure want to delete?")) {
-      this.router.navigate(['/customer/clients/delete',data.id]);
+      this.UpdateValues[0]['projectId'] = id.toString();
+
+      this.http.update('project', this.UpdateValues[0]).subscribe(
+        (data: any) => {
+         
+            this.toastr.success(data.msg);
+          window.location.reload();
+        },
+        (error: any) => {
+          this.toastr.error(error.msg);
+        });
+
     }
   }
 

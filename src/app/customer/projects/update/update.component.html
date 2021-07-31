@@ -17,7 +17,7 @@
             <div class="" id="Departments-list" role="tabpanel">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">Adding New Project</h2>
+                        <h2 class="card-title">Update Project Details</h2>
                     </div>
                     <div class="card-body">
                         <form class="example-form" [formGroup]="custForm">
@@ -119,15 +119,15 @@
                                     </div>
 
                                 </div>
-                             
+                               
 
-                                <h3 class="card-title">Team Details <i class="fa fa-plus-circle text-right"
+                                <h3 class="card-title">Add Team Details <i class="fa fa-plus-circle text-right"
                                 (click)="addTeam()" aria-hidden=" true"></i></h3>
-                                    <div style="overflow: scroll;height:200px;" class="location-div" #target1>
+                                    <div style="overflow: scroll;height:200px;padding:20px;" class="location-div" #target1>
                                         <div *ngFor="let team of team; let k = index" style="border:1px solid grey;margin:5px;padding:10px;"> 
                                             <p>Employee - {{ k+1 }} </p>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <mat-form-field class="example-full-width">
                                                         <input matInput [(ngModel)]="team.empId"
                                                             [ngModelOptions]="{standalone: true}" placeholder="Employee ID">
@@ -139,7 +139,19 @@
                                                             [ngModelOptions]="{standalone: true}" placeholder="Role of the Employee">
                                                     </mat-form-field>
                                                 </div>
+                                                <div class="col-md-2">
+                                                    <ng-container *ngIf="team.id == ''; then thenTemplate; else elseTemplate"></ng-container>
+                                                    <ng-template #thenTemplate>
+                                                        <button  class="btn btn-primary" (click)="AddEmployee(team.empId,team.role)">Add</button>
+
+                                                    </ng-template>
+                                                    <ng-template #elseTemplate>
+                                                        <button  class="btn btn-danger" (click)="deleteEmployee(team.id)">Delete</button>
+
+                                                    </ng-template>
+                                                    
                                                
+                                                </div>
                                             </div>
                                       
                                         
@@ -149,13 +161,13 @@
 
                                 <h3 class="card-title">Other Details</h3>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <mat-form-field class="example-full-width">
                                            <input matInput [(ngModel)]="this.skills"
                                                formControlName ="skills" placeholder="Skills">
                                        </mat-form-field>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <mat-form-field appearance="fill">
                                             <mat-label>Interview Level</mat-label>
                                             <mat-select formControlName="interviewPanelLevel" [(ngModel)]="this.interviewPanelLevel">
@@ -165,22 +177,13 @@
                                             </mat-select>
                                         </mat-form-field>
                                     </div>
-                                    <div class="col-md-4">
-                                        <mat-form-field>
-                                            <ngx-mat-file-input placeholder="Upload Documents" formControlName="docs"
-                                                >
-                                                <mat-icon ngxMatFileInputIcon><i class="fa fa-paperclip"></i></mat-icon>
-                                            </ngx-mat-file-input>
-                                        </mat-form-field>
-                                    </div>
-                                    <!-- <div class="col-md-6">
+                                    <div class="col-md-6">
                                         <label for="singleFile">Upload file</label>
                                         <mat-form-field class="example-full-width">
                                             <input matInput [(ngModel)]="this.docs"
                                             [ngModelOptions]="{standalone: true}" placeholder="Upload">
                                         </mat-form-field>
-                                    </div> -->
-                                  
+                                    </div>
                                     <div class="col-md-6">
                                         <mat-form-field>
                                             <textarea matInput 
