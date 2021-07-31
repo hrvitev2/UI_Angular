@@ -214,7 +214,13 @@ export class HttpService {
     .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
   return this.httpClient.post(this.APIURL + endPoint, body, { headers })
   }
-
+  AddEmployee(body)
+  {
+    let endPoint = "customer/project/addTeam";
+    let headers = new HttpHeaders()
+    .set("Content-Type", "application/json").set("Authorization", 'Bearer ' + this.token);
+  return this.httpClient.post(this.APIURL + endPoint, body, { headers })
+  }
   upload(fd) {
     let headers = new HttpHeaders()
       .set("Authorization", 'Bearer ' + this.token);

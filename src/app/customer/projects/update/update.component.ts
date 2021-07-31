@@ -37,10 +37,18 @@ export class UpdateComponent implements OnInit {
   interviewPanelLevel:any;
   file: any;
   id:any;
-  deleteEmp = [{
+  deleteEmp = {
     "projectId":"",
-      "teamRowId" : ""
-  }];
+    "teamRowId": ""  
+  };
+      addEmp : any = {
+        "projectId":"",
+        "team": [
+          {
+              "empId":"",
+              "role": ""
+          }]
+          };
   statusArray = [{
     "key":"l","value" : "Lead Generated"
     },
@@ -132,17 +140,15 @@ export class UpdateComponent implements OnInit {
   }
   deleteEmployee(Rowid)
   {
-
-    this.deleteEmp[0].projectId = this.id;
-    this.deleteEmp[0].teamRowId = Rowid;
-
+    this.deleteEmp = {
+      'projectId' : this.id,
+      "teamRowId": Rowid.toString()
+    };
     
-
-    this.http.deleteEmployee('this.deleteEmp').subscribe(
+    this.http.deleteEmployee(this.deleteEmp).subscribe(
       (data: any) => {
         this.toastr.success(data.msg);
-          window.location.reload();
-
+          setTimeout(function(){ window.location.reload(); }, 1000);
       },
       (error: any) => {
         this.toastr.error(error.msg);
@@ -150,7 +156,25 @@ export class UpdateComponent implements OnInit {
   }
   AddEmployee(id,role)
   {
+    
+    this.addEmp = {
+      'projectId' : this.id,
+      "team": [
+        {
+            "empId":id,
+            "role": role
+        }
+    ]
+    };
 
+    this.http.AddEmployee(this.addEmp).subscribe(
+      (data: any) => {
+        this.toastr.success(data.msg);
+          setTimeout(function(){ window.location.reload(); }, 1000);
+      },
+      (error: any) => {
+        this.toastr.error(error.msg);
+      });
   }
   scrollToElement(el): void {
     this.myScrollContainer.nativeElement.scroll({
