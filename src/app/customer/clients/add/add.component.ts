@@ -40,6 +40,11 @@ export class AddComponent implements OnInit {
     "callbackTime":"",
     "remarks":""
   }];
+  i = 0;
+  msaStartDate: any;
+  msaEndDate: any;
+  minDateFrom = new Date();
+
   socialProfile: any = [
     {
       "type": "",
@@ -48,6 +53,12 @@ export class AddComponent implements OnInit {
     }
   ];
   file: any;
+  startDateArray = new Array(30);
+  startEndArray = new Array(31);
+  showTemplateDownload = 0;
+  showUploadTemplate: any;
+  tcMSA: any;
+TimesheetTemplate: any;
   statusArray = [{
     "key":"l","value" : "Lead Generated"
     },
@@ -64,23 +75,45 @@ export class AddComponent implements OnInit {
       "key":"a","value" : "Active"
     },
   ];
+  contractEmpPayrollSettings : any = [{
+    "weekEndInclude": "",
+    "payrollStartDate": "",
+    "payrollEndDate": "",
+    "timesheetTemplate": "",
+    "payrollTriggerDate": "",
+    "customTimesheetName": "",
+}];
+paymentInfo : any = [{
+  "type" : "",
+  "percentage" : "",
+   "invoicePayableIn" : "",
+   "tcMSA" : "",
+   "msaStartDate" : "",
+   "msaEndDate" : ""
+  }]
+  placeholder : any;
   serviceModel:any;
   constructor(private http: HttpService, private router: Router, private activatedRoute: ActivatedRoute, private toastr: ToastrService) {
     this.custForm = new FormGroup({
-      //  'Porfolio': new FormControl("", Validators.required),
+       'tcMSA': new FormControl(""),
       'clientName' : new FormControl("", Validators.required),
-      // 'fName': new FormControl("", Validators.required),
-      // 'lName': new FormControl("", Validators.required),
-      // 'designation': new FormControl("", Validators.required),
-      // 'propMobile': new FormControl("", [Validators.required, Validators.minLength(10), Validators.maxLength(10)]),
-      // 'propEmail': new FormControl("", [Validators.required, Validators.email]),
-    //  'remarks': new FormControl(""),
+      'msaEndDate': new FormControl(""),
+      'msaStartDate': new FormControl(""),
+
+      'weekEndInclude': new FormControl("", Validators.required),
+      'payrollStartDate': new FormControl("", Validators.required),
+      'payrollEndDate': new FormControl("", Validators.required),
+      'timesheetTemplate': new FormControl("", Validators.required),
+      'payrollTriggerDate': new FormControl("", Validators.required),
+      'customTimesheetName': new FormControl("", Validators.required),
+      'paymentPercentage': new FormControl("", Validators.required),
+      'invoicePayableIn': new FormControl("", Validators.required),
+     
       'location': new FormControl("", Validators.required),
       'socialProfile': new FormControl(""),
        'serviceModel': new FormControl("", Validators.required),
         'status': new FormControl(""),
-      //  "callbackDate": new FormControl(""),
-      //  "callbackTime": new FormControl(""),
+      
        "contact": new FormControl("")
     });
     // this.activatedRoute.params.subscribe(params => {
@@ -92,7 +125,8 @@ export class AddComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.serviceModel = 1;
+    this.placeholder = "Full Time";
   }
 
   addLocation() {
@@ -116,6 +150,68 @@ export class AddComponent implements OnInit {
     });
   }
 
+
+  TemplateStatus()
+  {
+    // alert(this.TimesheetTemplate);
+    if(this.contractEmpPayrollSettings.timesheetTemplate == 1)
+    {
+      this.showTemplateDownload = 1;
+    }
+    else
+    {
+      this.showTemplateDownload = 0;
+    }
+  }
+
+  ShowClientSettings()
+  {
+    
+    if(this.serviceModel == 1 || this.serviceModel == 4 || this.serviceModel == 5 || this.serviceModel == 6)
+    {
+      if(this.serviceModel == 4)
+      {
+          this.placeholder = "RPO";
+      }
+      else
+      {
+        this.placeholder = "Full Time";
+      }
+
+      document.getElementById("fullTime").style.display = 'block';
+            document.getElementById("ContractTime").style.display = 'none';
+
+      document.getElementById("ClientPaymentCardTitle").style.display = 'block';
+      document.getElementById("PayrollTitle").style.display='none';
+      document.getElementById("PayrollTime").style.display = 'none';
+
+    }
+    if(this.serviceModel == 2)
+    {
+      this.placeholder = "Full Time";
+
+           
+            document.getElementById("fullTime").style.display = 'none';
+            document.getElementById("ContractTime").style.display = 'block';
+
+            document.getElementById("PayrollTitle").style.display='block';
+            document.getElementById("ClientPaymentCardTitle").style.display = 'block';
+            document.getElementById("PayrollTime").style.display = 'block';
+      
+    }
+    if(this.serviceModel == 3)
+    {
+      this.placeholder = "Full Time";
+
+      document.getElementById("ContractTime").style.display = 'block';
+      document.getElementById("ClientPaymentCardTitle").style.display = 'block';
+      document.getElementById("fullTime").style.display = 'block';
+      document.getElementById("PayrollTime").style.display = 'block';
+      document.getElementById("PayrollTitle").style.display='block';
+
+    }
+    
+  }
 
   addContact() {
    this.contact.push({

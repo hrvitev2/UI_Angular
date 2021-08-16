@@ -32,12 +32,13 @@
                                 <div class="col-md-6">
                                     <mat-form-field appearance="fill">
                                         <mat-label>Service Model</mat-label>
-                                        <mat-select formControlName="serviceModel" [(ngModel)]="this.serviceModel">
-                                            <mat-option value="1">FULL TIME STAFING</mat-option>
-                                            <mat-option value="2">CONTRACT STAFFING</mat-option>
-                                            <mat-option value="3">DIRECT CONTRACT</mat-option>
+                                        <mat-select formControlName="serviceModel" (selectionChange)="ShowClientSettings();" [(ngModel)]="this.serviceModel">
+                                            <mat-option value="1">FULL TIME</mat-option>
+                                            <mat-option value="2">CONTRACT</mat-option>
+                                            <mat-option value="3">FULL TIME & CONTRACT</mat-option>
                                             <mat-option value="4">RPO</mat-option>
-                                            <mat-option value="5">DEVELOPEMENT</mat-option>
+                                            <mat-option value="5">EXCLUSIVE</mat-option>
+                                            <mat-option value="6">DEVELOPEMENT</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -203,7 +204,7 @@
                            </div>
                             <br />
 
-                        <h3 class="card-title">socialProfile <span (click)="addSocial()" class="text-right"><i
+                            <h3 class="card-title">socialProfile <span (click)="addSocial()" class="text-right"><i
                             class="fa fa-plus-circle" aria-hidden="true"></i></span></h3>
                             <div class="row" *ngFor="let social of socialProfile">
                                 <div class="col-md-4">
@@ -236,10 +237,171 @@
                             </div>
                             <br />
 
-                         
+                            <h3 class="card-title" style="display:none"  id="PayrollTitle">Contract Employee Payroll Settings</h3>
+                                <div style="display: none;" id="PayrollTime" class="row">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>Weekends Include</mat-label>
+                                                <mat-select formControlName="weekEndInclude"  [(ngModel)]="contractEmpPayrollSettings.weekEndInclude">
+                                                    <mat-option value="1">Yes</mat-option>
+                                                    <mat-option value="0">No</mat-option>
+                                                    
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field appearance="fill">
+                                               <mat-label>Payroll Start Date </mat-label>
+                                               <mat-select formControlName="payrollStartDate" [(ngModel)]="contractEmpPayrollSettings.payrollStartDate">
+                                                 <mat-option value="{{ k+1 }}" *ngFor="let arr of startDateArray; let k = index"> {{ k+1 }}</mat-option>
+                                                </mat-select>
+                                           </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field appearance="fill">
+                                               <mat-label>Payroll End Date </mat-label>
+                                               <mat-select formControlName="payrollEndDate" [(ngModel)]="contractEmpPayrollSettings.payrollEndDate">
+                                                 <mat-option  value="{{ e+1 }}" *ngFor="let end of startEndArray; let e = index"> 
+                                                     <ng-container *ngIf="e != 30; else elseTemplate">
+                                                         {{ e+1 }}
+                                                     </ng-container>
+                                                     <ng-template #elseTemplate>
+                                                    End of every Month     
+                                                    </ng-template>
+                                                     
+                                                    </mat-option>
+                                                </mat-select>
+                                           </mat-form-field>
+                                        </div>
+                                    </div>
+                                   <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="fill">
+                                           <mat-label>Timesheet Trigger Date </mat-label>
+                                           <mat-select formControlName="payrollTriggerDate" [(ngModel)]="contractEmpPayrollSettings.payrollTriggerDate">
+                                             <mat-option  value="{{ e+1 }}" *ngFor="let end of startEndArray; let e = index"> 
+                                                 <ng-container *ngIf="e != 30; else elseTemplate">
+                                                     {{ e+1 }}
+                                                 </ng-container>
+                                                 <ng-template #elseTemplate>
+                                                    End of every Month     
+                                                 </ng-template>
+                                                 
+                                                </mat-option>
+                                            </mat-select>
+                                       </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="fill">
+                                           <mat-label>Timesheet Template type </mat-label>
+                                           <mat-select [(value)]="this.contractEmpPayrollSettings.timesheetTemplate" formControlName="timesheetTemplate" (selectionChange)="TemplateStatus();">
+                                            <mat-option value="0">Default</mat-option>
+                                            <mat-option value="1">Own</mat-option>
+                                        </mat-select>
+                                       </mat-form-field>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
 
-                           
+                                           
+                                            <ng-container *ngIf="showTemplateDownload == 1; else elseTemplate">
+                                                <mat-form-field>
+                                                    <ngx-mat-file-input [(ngModel)]="contractEmpPayrollSettings.customTimesheetName" placeholder="Upload Timesheet Template">
+                                                        <mat-icon ngxMatFileInputIcon><i class="fa fa-paperclip"></i></mat-icon>
+                                                    </ngx-mat-file-input>
+                                                </mat-form-field>
+                                            </ng-container>
+                                            <ng-template #elseTemplate>
+                                                <button type="button" class="btn btn-primary">Download Template</button>
 
+                                            </ng-template>
+                                    </div>
+                                   </div>
+                                </div>
+                                <br />
+                                <h3 class="card-title" style="display:none" id="ClientPaymentCardTitle">Client Payment Information</h3>
+                                <div style="display: none;" id="fullTime">
+                                  <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput formControlName="paymentPercentage" [(ngModel)]="paymentInfo.type" placeholder="{{ placeholder }}">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput formControlName="invoicePayableIn" [(ngModel)]="paymentInfo.invoicePayableIn"  placeholder="Invoice Payable in Perentage">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field>
+                                            <ngx-mat-file-input placeholder="T&C/MCA" formControlName="tcMSA">
+                                                <mat-icon ngxMatFileInputIcon><i class="fa fa-paperclip"></i></mat-icon>
+                                            </ngx-mat-file-input>
+                                        </mat-form-field>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>MSA Start Date </mat-label>
+                                            <input [min]="minDateFrom"  matInput  [matDatepicker]="pickerstart"  [(ngModel)]="paymentInfo.msaStartDate" [ngModelOptions]="{standalone: true}">
+                                            <mat-datepicker-toggle matSuffix [for]="pickerstart"></mat-datepicker-toggle>
+                                            <mat-datepicker #pickerstart></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field appearance="fill">
+                                            <mat-label>MSA End Date </mat-label>
+                                            <input [min]="minDateFrom"  matInput [ngModelOptions]="{standalone: true}"  [matDatepicker]="pickerEnd" [(ngModel)]="paymentInfo.msaEndDate">
+                                            <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+                                            <mat-datepicker #pickerEnd></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                  </div>
+                                   
+                                </div> 
+                                <div style="display: none;" id="ContractTime">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput placeholder="Contract">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput placeholder="Invoice Payable in">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field>
+                                                <ngx-mat-file-input placeholder="T&C/MCA" formControlName="tcMSA">
+                                                    <mat-icon ngxMatFileInputIcon><i class="fa fa-paperclip"></i></mat-icon>
+                                                </ngx-mat-file-input>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>MSA Start Date </mat-label>
+                                                <input [min]="minDateFrom"  matInput formControlName="msaStartDate"  [matDatepicker]="pickerstartContract" [(ngModel)]="this.msaStartDate">
+                                                <mat-datepicker-toggle matSuffix [for]="pickerstartContract"></mat-datepicker-toggle>
+                                                <mat-datepicker #pickerstartContract></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field appearance="fill">
+                                                <mat-label>MSA End Date </mat-label>
+                                                <input [min]="minDateFrom"  matInput formControlName="msaEndDate"  [matDatepicker]="pickerEndContract" [(ngModel)]="this.msaEndDate">
+                                                <mat-datepicker-toggle matSuffix [for]="pickerEndContract"></mat-datepicker-toggle>
+                                                <mat-datepicker #pickerEndContract></mat-datepicker>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                   
+                                    
+                                </div> 
                         </form>
                         <button type="button" class="btn btn-primary float-right" (click)="add()">Save</button>
                         <button type="button" class="btn btn-primary" [routerLink]="['/customer/client/list']">
